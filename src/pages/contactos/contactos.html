@@ -1,0 +1,146 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Contactos</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-grid>
+      <ion-row align-items-stretch (click)="accordionHandler('miniSaude')">
+        <ion-label style="font-size: 18px; font-weight: bold;">
+          Ministério da Saúde
+        </ion-label>
+        <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:5px; font-size: 35px;" [name]="miniSaudeIcon"></ion-icon>
+        <div class="greenBorder">
+        </div>
+      </ion-row>
+      <div [hidden]="!miniSaude">
+
+        <div (click)="sendEmail('servicedesk@spms.min-saude.pt')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/msgclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;">E-Mail:</div>
+            <div text-wrap>servicedesk@spms.min-saude.pt</div>
+          </div>
+        </div>
+
+        <div (click)="onClickNumber('220129818')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/tlfclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;">Telefone:</div>
+            <div>220 129 818</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/calendarclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;">
+              Horário:
+            </div>
+            <ion-row>
+              <div>
+                <b>Disponível 24 horas/todos os dias</b>
+                <br>
+                <span style="font-size:12px;">(Questões relacionadas com a utilização da aplicação)
+                </span>
+              </div>
+            </ion-row>
+          </div>
+        </div>
+
+        <div (click)="sendEmail('infosico@dgs.min-saude.pt')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/msgclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;"> Questões funcionais:</div>
+            <div>infosico@dgs.min-saude.pt</div>
+          </div>
+        </div>
+      </div>
+      <div class="smSpacer"></div>
+      <ion-row align-items-stretch (click)="accordionHandler('miniJustica')">
+        <ion-label style="font-size: 18px; font-weight: bold;">
+          Ministério da Justiça
+        </ion-label>
+        <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:5px; font-size: 35px;" [name]="miniJusticaIcon"></ion-icon>
+        <div class="greenBorder">
+        </div>
+      </ion-row>
+      <div [hidden]="!miniJustica">
+
+        <div (click)="sendEmail('apoio@igfej.mj.pt')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/msgclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;"> E-Mail:</div>
+            <div>apoio@igfej.mj.pt</div>
+          </div>
+        </div>
+
+        <div (click)="onClickNumber('707200004')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/tlfclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;">Telefone:</div>
+            <div>707 200 004</div>
+          </div>
+        </div>
+
+        <div (click)="onClickNumber('213189000')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/tlfclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;">Telefone:</div>
+            <div>213 189 000</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="smSpacer"></div>
+      <ion-row align-items-stretch (click)="accordionHandler('miniAdminInterna')">
+        <ion-label text-wrap style="font-size: 18px; font-weight: bold;">
+          Ministério da Admin. Interna
+        </ion-label>
+        <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:5px; font-size: 35px;" [name]="miniAdminInternaIcon"></ion-icon>
+        <div class="greenBorder">
+        </div>
+      </ion-row>
+      <div [hidden]="!miniAdminInterna">
+
+        <div (click)="sendEmail('helpdesk@dgie.mai.gov.pt')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/msgclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;"> E-Mail:</div>
+            <div>helpdesk@dgie.mai.gov.pt</div>
+          </div>
+        </div>
+
+        <div (click)="onClickNumber('214219700')" style="margin-top:10px;">
+          <div class="verticalItemImage">
+            <img src="assets/img/tlfclick.svg" item-left width="63px" height="47px" />
+          </div>
+          <div class="verticalItemText">
+            <div style="font-size: 18px; font-weight: bold;">Telefone:</div>
+            <div>214 219 700</div>
+          </div>
+        </div>
+      </div>
+    </ion-grid>
+  </ion-list>
+</ion-content>

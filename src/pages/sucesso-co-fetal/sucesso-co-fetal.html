@@ -1,0 +1,51 @@
+<ion-header>
+
+  <ion-navbar hideBackButton="true">
+    <ion-title>Sucesso</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-label style="font-size: 17px; font-weight: bold;" text-wrap text-wrap>
+    <div [innerHTML]="msgConfirmacao"></div>
+  </ion-label>
+
+  <div class="smSpacer"></div>
+
+  <div text-center>
+    <img src="assets/img/print.svg" align="middle" width="30px" height="30px" />
+  </div>
+  <div>
+    <ion-label class="labelDescription">
+      Imprimir
+    </ion-label>
+    <div class="greenBorder">
+    </div>
+  </div>
+  <ion-item *ngIf='showImprimirGuiaTransporte' (click)="pdfHandler('ImpressaoGuia')">
+    <ion-label class="impressaoDocumentos">
+      Guia de Transporte
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf='showImprimirCO' (click)="pdfHandler('ImpressaoCO')">
+    <ion-label class="impressaoDocumentos">
+      Imprimir CO
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf='showImprimirCOSemCausasMorte' (click)="pdfHandler('ImpressaoCOCausas')">
+    <ion-label class="impressaoDocumentos">
+      Imprimir CO s/ Causas Morte
+    </ion-label>
+  </ion-item>
+  <div class="smSpacer"></div>
+
+</ion-content>
+<ion-footer>
+  <div>
+    <button (click)="backToHome()" class="buttonHome">
+      <img src="assets/img/iniciovector.svg" width="100%;" height="50px" item-left/>
+    </button>
+  </div>
+</ion-footer>

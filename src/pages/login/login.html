@@ -1,0 +1,54 @@
+<ion-content id="loginPage" padding>
+    <ion-grid text-center>
+        <ion-row class="rowImage">
+        <ion-col col-6 col-md-4 col-xl-3>
+   
+                <img src="assets/img/logo.svg" class="logo" />
+        </ion-col>
+    </ion-row>
+    </ion-grid>
+
+    <div class="smSpacer"></div>
+         
+            <form #loginForm="ngForm"  novalidate>
+                <ion-item class="authFields">
+                    <img item-left src="assets/img/perfil.svg" class="user" />
+                    <div item-left class="border"></div>
+                    <ion-input placeholder="Utilizador" class="inputsField" [(ngModel)]="login.username" name="username" type="text" #username="ngModel"
+                        required>
+                    </ion-input>
+                    <p [hidden]="didSubmit || username.valid" class="loginFailure" padding-left>
+                        <b> Nome do utilizador é necessário </b>
+                    </p>
+                </ion-item>
+                <div class="smspacer"></div>
+                <ion-item class="authFields">
+                    <img item-left src="assets/img/lock.svg" class="pass" />
+                    <div item-left class="border"></div>
+                    <ion-input placeholder="Password" class="inputsField" [(ngModel)]="login.password" name="password" type="password" #password="ngModel"
+                        required>
+                    </ion-input>
+                    <p [hidden]="didSubmit || password.valid" class="loginFailure" padding-left>
+                        <b> Password é necessária </b>
+                    </p>
+                </ion-item>
+                <div class="smspacer"></div>
+                <button ion-button class="buttonLogin" full (click)="onLogin(loginForm)" type="submit">Entrar</button>
+                <div class="smspacer"></div>
+            </form>        
+
+</ion-content>
+
+
+<ion-footer>
+    <ion-toolbar class="footerLogin" *ngIf="!showFooter">
+        <a class="itemLink"  (click)="openUrl('https://servicos.min-saude.pt/acesso/sico/registo/')">
+            Pedir credenciais de acesso
+        </a>
+        <div class="smspacer"></div>
+        <span class="normalLabel"> Esqueci-me da senha? </span>
+        <a class="itemLink"(click)="openUrl('https://servicos.min-saude.pt/acesso/sico/passReset')">
+            Carregue aqui!
+        </a>
+    </ion-toolbar>
+</ion-footer>

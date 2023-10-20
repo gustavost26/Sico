@@ -1,0 +1,160 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            <div text-wrap>
+                Consultar CO Normal
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="coNormalForm" padding>
+        <ion-grid>
+            <ion-label text-wrap class="labelIntroduction">
+                Introduza o número do CO Normal
+            </ion-label>
+            <div>
+                <ion-item-divider class="inputSearchText" text-wrap>
+                    <ion-input type="tel" min="0" [maxlength]="10" (ionChange)="numberInput(this.coNormalForm.get('numCO').value,'numCO', $event)"
+                        formControlName="numCO">
+                    </ion-input>
+                    <button ion-button clear (click)="selectCO()" item-right>
+                        <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                    </button>
+                </ion-item-divider>
+            </div>
+            <div class="smSpacer"></div>
+   <!--
+            <ion-item no-lines>
+                <ion-label>Pesquisa avançada</ion-label>
+                <ion-checkbox (ionChange)="accordionHandler('advancedOptions')"></ion-checkbox>
+            </ion-item>
+
+         
+            <div [hidden]="!advancedOptions">
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Introduza o número identificação civil
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="number" min="0" inputmode="numeric" pattern="[0-9]*" (ionChange)="limitValue(this.coNormalForm.get('nic').value,'nic', 10)"
+                            formControlName="nic">
+                        </ion-input>
+                        <button ion-button clear (click)="selectCO()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Introduza o número utente do SNS
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="number" min="0" inputmode="numeric" pattern="[0-9]*" (ionChange)="limitValue(this.coNormalForm.get('numUtente').value,'numUtente', 10)"
+                            formControlName="numUtente">
+                        </ion-input>
+                        <button ion-button clear (click)="selectCO()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Introduza o nome
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-textarea rows="2" type="text" (ionChange)="limitValue(this.coNormalForm.get('nomeFalecido').value,'nomeFalecido', 10)"
+                            formControlName="nomeFalecido">
+                        </ion-textarea>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Local do óbito
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-select formControlName="localObito">
+                            <ion-option value="f">Female</ion-option>
+                            <ion-option value="m">Male</ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Data do óbito entre
+                </ion-label>
+                <div>
+                    <ion-grid>
+                        <ion-row>
+
+                            <ion-col col-6>
+                                <ion-item-divider class="inputSearchText">
+                                    <ion-datetime type="date" id="dataInicioObito" formControlName="dataInicioObito" displayFormat="DD-MM-YYYY" doneText="Seleccionar"
+                                        cancelText="Cancelar" placeholder="dd-mm-aaaa">
+                                    </ion-datetime>
+
+                                    <img style="background-color: transparent;" item-right src="assets/img/schedule.svg" width="15px;" height="15px;" />
+
+                                </ion-item-divider>
+                            </ion-col>
+                            
+                            <ion-col col-6>
+                                <ion-item-divider class="inputSearchText">
+                                    <ion-datetime type="date" id="dataFimObito" formControlName="dataFimObito" displayFormat="DD-MM-YYYY" doneText="Seleccionar"
+                                        cancelText="Cancelar" placeholder="dd/mm/aaaa">
+                                    </ion-datetime>
+                                    <img style="background-color: transparent;" item-right src="assets/img/schedule.svg" width="15px;" height="15px;" />
+                                </ion-item-divider>
+
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-grid>
+
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label  text-wrap class="labelIntroduction">
+                    Data de certificação entre
+                </ion-label>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6>
+                            <ion-item-divider class="inputSearchText">
+                                <ion-datetime type="date" id="dataInicioCertificacao" formControlName="dataInicioCertificacao" displayFormat="DD-MM-YYYY"
+                                    doneText="Seleccionar" cancelText="Cancelar" placeholder="dd/mm/aaaa">
+                                </ion-datetime>
+                                <img style="background-color: transparent;" item-right src="assets/img/schedule.svg" width="15px;" height="15px;" />
+                            </ion-item-divider>
+                        </ion-col>
+
+                        <ion-col col-6>
+                            <ion-item-divider class="inputSearchText">
+                                <ion-datetime type="date" id="dataFimCertificacao" formControlName="dataFimCertificacao" displayFormat="DD-MM-YYYY" doneText="Seleccionar"
+                                    cancelText="Cancelar" placeholder="dd/mm/aaaa">
+                                </ion-datetime>
+                                <img style="background-color: transparent;" item-right src="assets/img/schedule.svg" width="15px;" height="15px;" />
+                            </ion-item-divider>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+                <ion-row>
+                    <ion-col class="logoColumn">
+                        <img src="assets/img/Botaopesquisar.svg" (click)="selectCO()" width="100%" height="51px" />
+                    </ion-col>
+                </ion-row>
+            </div> -->
+        </ion-grid>
+    </form>
+
+</ion-content>

@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar no-border>
+        <button ion-button menuToggle left (click)="doClick()">
+            <img item-left width="23px" height="17px" src="assets/img/burguer.svg" />
+        </button>
+        <ion-item style="background-color: transparent;" item-right no-lines>
+            <img item-right width="100px" height="100px" src="assets/img/SNS2.svg" />
+        </ion-item>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid class="gridStyle">
+
+        <ion-row class="logoRow">
+            <ion-col class="logoCol">
+                <img src="assets/img/logo.svg" (click)="openSlideMenu()" class="logo" />
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<ion-footer class="bottomBar" style="height: 23%;">
+    <img src="assets/img/texto.svg" width="100%;" height="100%;" />
+</ion-footer>

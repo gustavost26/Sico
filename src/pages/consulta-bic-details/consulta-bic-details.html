@@ -1,0 +1,840 @@
+<ion-header>
+    <ion-navbar #navbar>
+        <ion-title>
+            <div *ngIf="!showAlternativeBackButtonText" text-wrap>
+                Consultar BIC
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content class="has-header">
+    <div class="smSpacer"></div>
+    <div text-center>
+        <img src="assets/img/print.svg" align="middle" width="30px" height="30px" />
+    </div>
+    <div>
+        <ion-label class="labelDescription">
+            Imprimir
+        </ion-label>
+        <div class="greenBorder">
+        </div>
+    </div>
+    <ion-item no-lines (click)="pdfHandler('ImpressaoBIC')">
+        <ion-label class="impressaoDocumentos">
+            Imprimir BIC
+        </ion-label>
+    </ion-item>
+    <ion-item no-lines (click)="pdfHandler('ImpressaoBICTransporte')">
+        <ion-label text-wrap class="impressaoDocumentos">
+            BIC/Documento para identificação e transporte de cadáver
+        </ion-label>
+    </ion-item>
+    <div class="smSpacer"></div>
+    <ion-grid padding>
+
+        <ion-label style="font-size: 17px; font-weight: bold;">
+            N.º Boletim de Informação Clínica
+        </ion-label>
+
+        <ion-item no-lines class="inputText">
+            <ion-input [readonly]="true" [ngModel]="numBic" name="numBic" type="number">
+            </ion-input>
+        </ion-item>
+
+        <div class="smSpacer"></div>
+
+        <ion-label style="font-size: 17px; font-weight: bold;">
+            N.º Certificado de Óbito
+        </ion-label>
+
+        <ion-item no-lines class="inputText">
+            <ion-input [readonly]="true" [ngModel]="numCO" name="numCO" type="number">
+            </ion-input>
+        </ion-item>
+    </ion-grid>
+
+    <form novalidate padding>
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('identFale')">
+                <ion-label text-wrap class="rowStyle">
+                    Identificação do Indíviduo
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="identFaleIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+            <div *ngIf="identFale">
+                <div class="smSpacer"></div>
+
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    N.º identificação civil
+                </ion-label>
+
+                <ion-item no-lines class="inputText">
+                    <ion-input type="number" [ngModel]="details.idCivil" name="idCivil" class="labelBold" [readonly]="true">
+                    </ion-input>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    N.º utente do SNS
+                </ion-label>
+
+                <ion-item no-lines class="inputText">
+                    <ion-input type="number" [ngModel]="details.nutente" name="nutente" [readonly]="true">
+                    </ion-input>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Nome
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-textarea rows="3" type="text" [ngModel]="details.nome" name="nome" [readonly]="true">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Nome do Pai
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-textarea rows="3" type="text" name="nomePai" [ngModel]="details.nomePai" [readonly]="true">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Nome da Mãe
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-textarea rows="3" type="text" name="nomeMae" [ngModel]="details.nomeMae" [readonly]="true">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label text-wrap style="font-size: 17px; font-weight: bold;">
+                    Profissão (se reformado colocar a profissão anterior)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-textarea rows="3" type="text" name="profissao" [ngModel]="details.profissao" [readonly]="true">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+                <ion-row>
+                    <ion-item no-lines>
+                        <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                            Desconhecida
+                        </ion-label>
+                        <ion-checkbox name="chkProfissaoDesconhecida" [ngModel]="details.chkProfissaoDesconhecida" [disabled]="true" [checked]="details.chkProfissaoDesconhecida">
+                        </ion-checkbox>
+                    </ion-item>
+                </ion-row>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Sexo
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-input type="text" class="labelBold" [readonly]="true" name="sexoDesc" [ngModel]="details.sexoDesc">
+                        </ion-input>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Data nascimento
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-input type="text" class="labelBold" [readonly]="true" [ngModel]="dataNascimento" name="dataNascimento">
+                        </ion-input>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Estado Civil
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-input type="text" [readonly]="true" name="estadoCivilDesc" [ngModel]="details.estadoCivilDesc">
+                        </ion-input>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-row>
+                    <ion-item text-wrap>
+                        <ion-label style="font-size:18px" text-wrap>
+                            <strong> Naturalidade </strong>
+                        </ion-label>
+                    </ion-item>
+                </ion-row>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    País
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="paisDesc">
+                            {{ details.paisDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Distrito (em Portugal)
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="distritoDesc">
+                            {{ details.distritoDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Concelho (em Portugal)
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="concelhoDesc">
+                            {{ details.concelhoDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Freguesia (em Portugal)
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="freguesiaDesc">
+                            {{ details.freguesiaDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-row>
+                    <ion-item text-wrap>
+                        <ion-label style="font-size:18px" text-wrap>
+                            <strong> Contacto familiar </strong>
+                        </ion-label>
+                    </ion-item>
+                </ion-row>
+
+                <div class="smSpacer"></div>
+
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Tipo contacto
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-input type="text" class="labelBold" name="tipoContactoDesc" [ngModel]="details.tipoContactoDesc" [readonly]="true">
+                        </ion-input>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Contacto
+                </ion-label>
+                <div>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="contactoFamiliar">
+                            {{ details.contactoFamiliar }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('identCircunstancial')">
+                <ion-label text-wrap class="rowStyle">
+                    Informação Circunstancial
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="identirCunstancialIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+            <div *ngIf="identCircunstancial">
+                <div class="smSpacer"></div>
+                <ion-label *ngIf="showCausasMorteConfidenciais" style="color: red; font-size: 17px; font-weight: bold;" text-wrap>
+                    Informação Confidencial
+                </ion-label>
+                <div *ngIf="!showCausasMorteConfidenciais">
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Informação disponível relativa às circunstâncias anteriores à admissão na instituição de saúde ou ao local de verificação
+                        do óbito, conforme aplicável
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea class="labelBold" rows="6" name="infoAdmissao" [ngModel]="details.infoAdmissao" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+                    <div class="smSpacer"></div>
+                
+                    <ion-label style="font-size: 17px; font-weight: bold; color:red;" text-wrap>
+                        ****AVISO COVID-19**** <br/>
+                        Caso o paciente se encontre infetado ou se suspeite de infecção pelo vírus SARS-CoV-2 por favor preencha o campo 'Paciente Infetado por SARS-CoV-2'
+                    </ion-label>
+                    <ion-label class="labelStyle" text-wrap>
+                        Paciente Infetado por SARS-CoV-2
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="resCovid19">
+                        <ion-grid>
+                            <ion-item>
+                                <ion-label>
+                                    Sim
+                                </ion-label>
+                                <ion-radio [disabled]="true" [checked]="resCovid19Yes">
+                                </ion-radio>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>
+                                    N&atilde;o
+                                </ion-label>
+                                <ion-radio [disabled]="true" [checked]="resCovid19No">
+                                </ion-radio>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>
+                                    Suspeito
+                                </ion-label>
+                                <ion-radio [disabled]="true" [checked]="resCovid19Suspect">
+                                </ion-radio>
+                            </ion-item>
+                        </ion-grid>
+                    </div>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('informacaoClinica')">
+                <ion-label text-wrap class="rowStyle">
+                    Informação Clínica
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="informacaoClinicaIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+            <div *ngIf="informacaoClinica">
+                <div class="smSpacer"></div>
+                <ion-label *ngIf="showCausasMorteConfidenciais" style="color: red; font-size: 17px; font-weight: bold;" text-wrap>
+                    Informação Confidencial
+                </ion-label>
+                <div *ngIf="!showCausasMorteConfidenciais">
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Transferido de
+                    </ion-label>
+
+                    <ion-item no-lines class="inputText">
+                        <ion-textarea class="labelBold" rows="4" name="transferidoDe" [ngModel]="details.transferidoDe" [readonly]="true">
+                        </ion-textarea>
+                    </ion-item>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Data admissão no local de transferência
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="dataAdmissaoLocalTransf" [ngModel]="details.dataAdmissaoLocalTransf" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Admitido em instituição de saúde?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="admitidoInstSaudeDesc" [ngModel]="details.admitidoInstSaudeDesc" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Admitido em
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="dataAdmissao" [ngModel]="details.dataAdmissao" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Hora de admissão
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="horaAdmissao" [ngModel]="details.horaAdmissao" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Chegou cádaver
+                        <span *ngIf="details.admitidoInstSaude === 1">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="chegouCadaverDesc" [ngModel]="details.chegouCadaverDesc" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Falecido em
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="falecidoEm" [ngModel]="falecidoEm" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        pelas (hh:mm)
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="horaFalecido" [ngModel]="details.horaFalecido" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Óbito verificado em
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="obitoVerificado" [ngModel]="obitoVerificado" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        pelas (hh:mm)
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-input type="text" class="labelBold" name="horaObito" [ngModel]="details.horaObito" [readonly]="true">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Situação clínica
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="7" class="labelBold" name="situacaoClinica" [ngModel]="details.situacaoClinica" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Antecedentes gerais relevantes
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="7" class="labelBold" name="antecedentesGerais" [ngModel]="details.antecedentesGerais" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Diagnóstico final ou provável
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="5" class="labelBold" name="diagnostico" [ngModel]="details.diagnostico" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Internamento(s) na(s) enfermaria(s) de
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="4" class="labelBold" name="internamentoEnf" [ngModel]="details.internamentoEnf" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Evolução clínica na(s) enfermaria(s)
+                        <span *ngIf="details.chegouCadaver === 2">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="4" class="labelBold" name="evolucaoClinica" [ngModel]="details.evolucaoClinica" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Exames complementares relevantes
+                        <span *ngIf="details.chegouCadaver === 2">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="4" class="labelBold" name="examesComplementares" [ngModel]="details.examesComplementares" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Terapêuticas clínicas e/ou cirúrgicas mais relevantes e/ou manobras de reanimação prestadas
+                        <span *ngIf="details.chegouCadaver === 2">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="4" class="labelBold" name="terapeuticas" [ngModel]="details.terapeuticas" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Produtos biológicos colhidos na instituição da saúde
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="4" class="labelBold" name="prodBio" [ngModel]="details.prodBio" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Vestígios e/ou outros elementos colhidos no acto de admissão ou internamento
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="4" class="labelBold" name="vestigios" [ngModel]="details.vestigios" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Outros elementos considerados relevantes
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="7" class="labelBold" name="outrosElementos" [ngModel]="details.outrosElementos" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Observações adicionais
+                    </ion-label>
+                    <div>
+                        <ion-item no-lines class="inputText">
+                            <ion-textarea rows="7" class="labelBold" name="observacoes" [ngModel]="details.observacoes" [readonly]="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('IdentifiMedico')">
+                <ion-label text-wrap class="rowStyle">
+                    Identificação do Médico que Presta a Informação
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="identifiMedicoIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+            <div *ngIf="IdentifiMedico">
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Nome do médico
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item no-lines class="inputText">
+                    <ion-label text-wrap class="labelBold" name="medicoNome">
+                        {{ details.medicoNome }}
+                    </ion-label>
+                </ion-item>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    N.º cédula profissional
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item no-lines class="inputText">
+                    <ion-label text-wrap class="labelBold" name="medicoCedulaProf">
+                        {{ details.medicoCedulaProf }}
+                    </ion-label>
+                </ion-item>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Morada Profissional
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="tipoMoradaProfissionalDesc">
+                            {{ details.tipoMoradaProfissionalDesc }}
+                        </ion-label>
+                </ion-item>
+                <div *ngIf="details.tipoMoradaProfissional === 1">
+                    <div class="smSpacer"></div>
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Tipo Entidade
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="tipoEntidade">
+                            {{ details.tipoEntidadeDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div *ngIf="details.tipoMoradaProfissional === 2">
+                    <div class="smSpacer"></div>
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Instituição
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="codigoInmlProfissionalDesc">
+                            {{ details.codigoInmlProfissionalDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div *ngIf=" details.tipoEntidade === 1 || details.tipoEntidade === 2 || details.tipoEntidade === 3">
+                    <div class="smSpacer"></div>
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Instituição de saúde
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="codigoSaudeProfissional">
+                            {{ details.codigoSaudeProfissionalDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div *ngIf="details.tipoEntidade === 1">
+                    <div class="smSpacer"></div>
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Serviço
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="tipoServicoDesc">
+                            {{ details.tipoServicoDesc }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div *ngIf="details.tipoServico === 4">
+                    <div class="smSpacer"></div>
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Qual?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <ion-item no-lines class="inputText">
+                        <ion-textarea rows="4" name="servicoOutro" [readonly]="true" [ngModel]="details.servicoOutro">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div *ngIf="details.tipoMoradaProfissional">
+                    <div class="smSpacer"></div>
+                    <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                        Unidade / Serviço
+                        <span *ngIf="details.tipoMoradaProfissional === 3">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <ion-item no-lines class="inputText">
+                        <ion-label text-wrap class="labelBold" name="moradaProfissionalOutro">
+                            {{ details.moradaProfissionalOutro }}
+                        </ion-label>
+                    </ion-item>
+                </div>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Tipo de contacto
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item no-lines class="inputText">
+                    <ion-input type="text" class="labelBold" name="medicoTipoContactoDesc" [ngModel]="details.medicoTipoContactoDesc" [readonly]="true">
+                    </ion-input>
+                </ion-item>
+                <div class="smSpacer"></div>
+                <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                    Contacto
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item no-lines class="inputText">
+                    <ion-label text-wrap class="labelBold" name="medicoContacto">
+                        {{ details.medicoContacto }}
+                    </ion-label>
+                </ion-item>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('versoesAnteriores')">
+                <ion-label class="rowStyle">
+                    Versões Anteriores
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="versoesAnterioresIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+            <div [hidden]="!versoesAnteriores">
+
+                <ion-grid>
+                        <ion-row style="text-align: center;">
+                                <ion-col col-4>
+                                        <ion-label class="labelListaVersoes">
+                                            Seleccionar
+                                        </ion-label>
+                                    </ion-col>
+                                    <ion-col col-4>
+                                        <ion-label class="labelListaVersoes">
+                                            N.º Versão
+                                        </ion-label>
+                                    </ion-col>
+                                    <ion-col col-4>
+                                        <ion-label class="labelListaVersoes">
+                                            Data óbito
+                                        </ion-label>
+                                    </ion-col>
+                        </ion-row>
+                </ion-grid>
+                <ion-grid *ngIf="listaVersoes.length > 0" radio-group [(ngModel)]="selectedVersion" [ngModelOptions]="{standalone: true}">
+                    <ion-row *ngFor="let versao of listaVersoes" style="text-align: center;">
+                            <ion-col col-4>
+                                <ion-radio value="{{ versao.versao }}" class="radioListaVersoes"> <!-- [disabled]="controlFieldsDispensaAndNuipc" -->
+                                </ion-radio>
+                            </ion-col>
+                            <ion-col col-4>
+                                <ion-label class="labelListaVersoesRow">
+                                    {{ versao.versao }}
+                                </ion-label>
+                            </ion-col>
+                            <ion-col col-4>
+                                <ion-label *ngIf="versao.data" class="labelListaVersoesRow">
+                                    {{ versao.data }}
+                                </ion-label>
+                                <ion-label *ngIf="versao.data === ''" class="labelListaVersoesRow labelDesconhecido">
+                                    Desconhecido
+                                </ion-label>
+                            </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-grid *ngIf="listaVersoes.length > 0">
+                    <ion-row align-items-center>
+                        <ion-col></ion-col>
+                        <ion-col col-12 col-md-6 col-lg-4 col-xl-3>
+                            <button class="buttonConfirm" width="100%" height="100%" [disabled]="selectedVersion === undefined" (click)="goToSelectedVersion(selectedVersion)">
+                                <img src="assets/img/consultarversao.svg" />
+                            </button>
+                        </ion-col>
+                        <ion-col></ion-col>
+                    </ion-row>
+                </ion-grid>
+                <div *ngIf="listaVersoes.length > 0" class="smSpacer"></div>
+                <div *ngIf="listaVersoes.length === 0">
+                    <ion-label class="buttonCheckVersao" style="text-align: center;">
+                        Sem resultados
+                    </ion-label>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <div class="smSpacer"></div>
+            <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                Data de registo (dd-mm-aaaa)
+                <font size="4px" color="red"> * </font>
+            </ion-label>
+            <ion-item no-lines class="inputText">
+                <ion-input type="text" class="labelBold" name="dataEmissao" [ngModel]="details.dataEmissao" [readonly]="true"></ion-input>
+            </ion-item>
+
+            <div class="smSpacer"></div>
+
+            <ion-label style="font-size: 17px; font-weight: bold;" text-wrap>
+                Hora de registo (hh:mm)
+                <font size="4px" color="red"> * </font>
+            </ion-label>
+            <ion-item no-lines class="inputText">
+                <ion-input type="text" class="labelBold" name="horaEmissao" [ngModel]="details.horaEmissao" [readonly]="true">
+                </ion-input>
+            </ion-item>
+        </ion-grid>
+
+    </form>
+    <div class="smSpacer"></div>
+</ion-content>

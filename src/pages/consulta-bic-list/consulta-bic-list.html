@@ -1,0 +1,114 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            <div text-wrap>
+                    Consultar BIC
+                </div>
+            </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="bicForm" padding>
+
+        <div *ngIf="errorsOnValidation">
+            <ion-list class="listError">
+                <div text-center>
+                    <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;">
+                </div>
+                <ion-item no-lines class="listError" *ngFor="let errorsList of listErrorsValidation.slice(0); let i = index" text-wrap>
+                    <font size="3" color="white">
+                        {{ errorsList}} </font>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <div *ngIf="alertsOnValidation">
+            <ion-list class="listAlert">
+                <div text-center>
+                    <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;" />
+                </div>
+                <ion-item no-lines class="listAlert" *ngFor="let alertsList of listAlertsValidation; let i = index;"
+                    text-wrap>  <!-- (click)="clickToTheField(alertsList.camposAlerta)" -->
+                    <font size="3" color="white">
+                        {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                    </font>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <ion-grid>
+            <ion-label text-wrap class="labelIntroduction">
+                Introduza o número do BIC
+            </ion-label>
+            <div>
+                <ion-item-divider class="inputSearchText">
+                    <ion-input type="tel" min="0" [maxlength]="9" (ionChange)="numberInput(bicForm.get('numBIC').value,'numBIC', $event)"
+                        formControlName="numBIC">
+                    </ion-input>
+                    <button ion-button clear (click)="BICList()" item-right>
+                        <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                    </button>
+                </ion-item-divider>
+            </div>
+            <div class="smSpacer"></div>
+
+            <!--
+            <ion-item no-lines>
+                    <ion-label>Pesquisa avançada</ion-label>
+                    <ion-checkbox  (ionChange)="accordionHandler('advancedOptions')"></ion-checkbox>
+            </ion-item>
+
+            <div [hidden]="!advancedOptions">
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Introduza o número identificação civil
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="number" min="0" inputmode="numeric" pattern="[0-9]*" (ionChange)="limitValue(this.coFetalForm.get('nic').value,'nic', 10)"
+                            formControlName="nic">
+                        </ion-input>
+                        <button ion-button clear (click)="selectCO()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Introduza o número utente do SNS
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="number" min="0" inputmode="numeric" pattern="[0-9]*" (ionChange)="limitValue(this.coFetalForm.get('numUtente').value,'numUtente', 10)"
+                            formControlName="numUtente">
+                        </ion-input>
+                        <button ion-button clear (click)="selectCO()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap class="labelIntroduction">
+                    Introduza o nome
+                </ion-label>
+                <div>
+                    <ion-item-divider class="inputSearchText">
+                        <ion-textarea rows="2" type="text" (ionChange)="limitValue(this.coFetalForm.get('nomeFalecido').value,'nomeFalecido', 10)"
+                            formControlName="nomeFalecido">
+                        </ion-textarea>
+                    </ion-item-divider>
+                </div>
+
+                <ion-row>
+                    <ion-col class="logoColumn">
+                        <img src="assets/img/Botaopesquisar.svg" (click)="BICList()" width="100%" height="51px" />
+                    </ion-col>
+                </ion-row>
+
+            </div>
+        -->
+        </ion-grid>
+    </form>
+</ion-content>

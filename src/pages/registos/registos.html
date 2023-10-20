@@ -1,0 +1,45 @@
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title>
+      Registar
+    </ion-title>
+
+    <ion-buttons end>
+      <img item-right class="imgSNS" width="100px" height="100px" src="assets/img/SNS2.svg" />
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+
+    <ion-row class="rows"></ion-row>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-4>
+        <ion-img width="100%" height="100%" src="assets/img/conormal.svg" (click)="menuHandler('registoCONormal')" class="button">
+        </ion-img>
+      </ion-col>
+      <ion-col col-1></ion-col>
+      <ion-col col-4>
+        <ion-img width="100%" height="100%" src="assets/img/cofetal.svg" (click)="menuHandler('registoCOFetal')" class="button">
+        </ion-img>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+    <ion-row class="rows"></ion-row>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col col-4>
+        <ion-img width="100%" height="100%" src="assets/img/bic.svg" (click)="menuHandler('registoBIC')" class="button">
+        </ion-img>
+      </ion-col>
+      <ion-col col-1></ion-col>
+      <ion-col col-4>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>

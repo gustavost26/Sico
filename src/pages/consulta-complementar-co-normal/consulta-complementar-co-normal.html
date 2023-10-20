@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            <div text-wrap>
+                    Alterar/Retificar CO Normal
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="coNormalForm" padding>
+
+        <div *ngIf="errorsOnValidation">
+            <ion-list class="listError">
+                <div text-center>
+                    <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;">
+                </div>
+                <ion-item no-lines class="listError" *ngFor="let errorsList of listErrorsValidation.slice(0); let i = index" text-wrap>
+                    <font size="3" color="white">
+                        {{ errorsList}} </font>
+                </ion-item>
+            </ion-list>
+        </div>
+        <ion-grid>
+            <ion-label text-wrap class="labelIntroduction">
+                Introduza o número do CO Normal
+            </ion-label>
+            <div>
+                <ion-item-divider class="inputSearchText">
+                    <ion-input type="tel" min="0" [maxlength]="10" (ionChange)="numberInput(coNormalForm.get('numCO').value,'numCO', $event)"
+                        formControlName="numCO">
+                    </ion-input>
+                    <button ion-button clear (click)="selectCO()" item-right>
+                        <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                    </button>
+                </ion-item-divider>
+            </div>
+            <div class="smSpacer"></div>
+        </ion-grid>
+    </form>
+</ion-content>

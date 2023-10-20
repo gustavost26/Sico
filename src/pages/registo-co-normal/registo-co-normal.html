@@ -1,0 +1,1622 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            <div text-wrap>
+                Registar CO Normal
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <div *ngIf="errorsOnValidation">
+        <ion-list class="listError">
+            <div text-center>
+                <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;">
+            </div>
+            <ion-item no-lines class="listError" (click)="clickToTheField(errorsList.camposErro)" *ngFor="let errorsList of listErrorsValidation.slice(0); let i = index"
+                text-wrap>
+                <font size="3" color="white">
+                    <b> {{ i+1 }}. </b> {{ errorsList.mensagemErro }} </font>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div *ngIf="alertsOnValidation">
+        <ion-list class="listAlert">
+            <div class="smSpacer"></div>
+            <div text-center>
+                <img src="assets/img/alert.svg" class="errorSymbol" />
+            </div>
+            <ion-item no-lines style="background-color:#fbb03b; margin-top:10px;" (click)="clickToTheField(alertsList.camposAlerta)"
+                *ngFor="let alertsList of listAlertsValidation.slice(0); let i = index" text-wrap>
+                <font size="3" color="white">
+                    <b> {{ i+1 }}. </b> {{ alertsList.mensagemAlerta }} </font>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div *ngIf="showSubmitMessage">
+        <ion-label>
+            <ion-item no-lines text-wrap>
+                <b> Atenção: </b> Após carregar na tecla 'Confirmar' os dados serão gravados na base de dados. Tem 1 hora para
+                efetuar quaisquer retificações, recorrendo à opção Alterar/Retificar CO (a complementação tem que ser feita
+                no computador, portátil ou outro). Após 1 hora este CO irá ser enviado para a conservatória e deixará de
+                ser possível complementá-lo (é necessário contactar helpdesk SICO para verificar estado do CO na conservatória).
+            </ion-item>
+        </ion-label>
+
+        <ion-grid>
+            <div (click)="onSubmitData()">
+                <button class="buttonConfirm">
+                    <img src="assets/img/confirmar.svg" width="100%" height="100%" />
+                </button>
+            </div>
+
+            <div class="smSpacer"></div>
+            <div (click)="onCancel()">
+                <button class="buttonConfirm">
+                    <img src="assets/img/cancelar.svg" width="100%;" height="100%;" />
+                </button>
+            </div>
+
+            <div class="smSpacer"></div>
+        </ion-grid>
+    </div>
+
+    <div *ngIf="showSucessMessage">
+        <ion-item text-wrap>
+            Certificado de Óbito registado com sucesso com o
+            <b> n.º {{ numCONormalForSucess }} </b>. Deve ser registado no processo clínico o nº de certificado de óbito emitido
+            ou guardada cópia da Guia de Transporte, para consulta posterior.
+        </ion-item>
+        <div class="smSpacer"></div>
+        <div text-center>
+            <img src="assets/img/print.svg" align="middle" width="30px" height="30px" />
+        </div>
+        <div>
+            <ion-label class="labelDescription">
+                Imprimir
+            </ion-label>
+            <div class="greenBorder">
+            </div>
+        </div>
+        <ion-item (click)="pdfHandler('ImpressaoGuia')">
+            <ion-label class="impressaoDocumentos">
+                Guia de Transporte
+            </ion-label>
+        </ion-item>
+        <ion-item (click)="pdfHandler('ImpressaoCO')">
+            <ion-label class="impressaoDocumentos">
+                Imprimir CO
+            </ion-label>
+        </ion-item>
+        <ion-item (click)="pdfHandler('ImpressaoCOCausas')">
+            <ion-label class="impressaoDocumentos">
+                Imprimir CO s/ Causas Morte
+            </ion-label>
+        </ion-item>
+        <div class="smSpacer"></div>
+    </div>
+
+    <form novalidate [formGroup]="coNormalForm" padding>
+
+        <ion-grid>
+            <ion-label text-wrap class="labelStyle">
+                Identificação do Boletim de Informação Clínica
+            </ion-label>
+
+            <ion-label id="numBIC" class="labelStyle">
+                <strong> Nº do BIC &emsp;</strong>
+
+                <ion-icon item-right color="secondary" style="font-size: 30px" *ngIf="showCheckIconBIC" [name]="checkIcon"></ion-icon>
+                <ion-icon item-right color="danger" style="font-size: 30px" [name]="closeIcon" *ngIf="showCloseIconBIC"></ion-icon>
+
+            </ion-label>
+            <div name="numBIC">
+                <ion-item-divider class="inputSearchText">
+                    <ion-input type="tel" min="0" [maxlength]="12" [disabled]="controlDisable" (ionBlur)="onBlur($event)"
+                        (ionChange)="numberInput(this.coNormalForm.get('numBIC').value,'numBIC', $event)" formControlName="numBIC">
+                    </ion-input>
+                    <button ion-button clear [disabled]="controlDisable" (click)="getDataBICHandler()" item-right>
+                        <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                    </button>
+                </ion-item-divider>
+            </div>
+
+            <div>
+                <div class="smSpacer"></div>
+                <ion-list>
+                    <ion-item class="listAlertSpecific" (click)="clickToTheField(alertsList.camposAlerta)" *ngFor="let alertsList of listAlertsBICValidation; let i = index;" text-wrap>
+                        <font size="3" color="white">
+                            {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                        </font>
+                    </ion-item>
+                    <ion-item class="listErrorSpecific" (click)="clickToTheField(errorsList.camposErro)" *ngFor="let errorsList of listErrorsBICValidation; let i = index;" text-wrap>
+                        <font size="3" color="white">
+                            {{ i+1 }}. {{ errorsList.mensagemErro }}
+                        </font>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('identFale')">
+                <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                    Identifica&ccedil;&atilde;o do Falecido
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="identIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+            <div [hidden]="!identFale">
+                <div class="smSpacer"></div>
+
+                <ion-label id="numBI" class="labelStyle">
+                    N.º identificação civil &emsp;
+                    <ion-icon item-right color="secondary" style="font-size: 30px" *ngIf="showCheckMarkIcon" [name]="checkIcon"></ion-icon>
+                    <ion-icon item-right color="danger" style="font-size: 30px" [name]="closeIcon" *ngIf="showCloseIcon"></ion-icon>
+                </ion-label>
+                <div name="numBI">
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="tel" min="0" [maxlength]="8" [disabled]="controlDisable" (ionBlur)="onBlur($event)"
+                            (ionChange)="numberInput(this.coNormalForm.get('numBI').value,'numBI', $event)" formControlName="numBI">
+                        </ion-input>
+                        <button ion-button clear [disabled]="controlDisable" (click)="getDataFalecidoCONormalHandler()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="numUtente" class="labelStyle">
+                    N.º utente do SNS &emsp;
+                    <ion-icon item-right color="secondary" style="font-size: 30px" *ngIf="showCheckMarkIcon" [name]="checkIcon"></ion-icon>
+                    <ion-icon item-right color="danger" style="font-size: 30px" [name]="closeIcon" *ngIf="showCloseIcon"></ion-icon>
+                </ion-label>
+
+                <div name="numUtente">
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="tel" min="0" [maxlength]="9" [disabled]="controlDisable" (ionBlur)="onBlur($event)"
+                            (ionChange)="numberInput(this.coNormalForm.get('numUtente').value,'numUtente', $event)" formControlName="numUtente">
+                        </ion-input>
+
+                        <button ion-button clear [disabled]="controlDisable" (click)="getDataFalecidoCONormalHandler()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <ion-list>
+                    <div class="smSpacer"></div>
+                    <ion-item class="listAlertSpecific" *ngFor="let alertsList of listAlertsBISNSValidation; let i = index;" text-wrap>
+                        <font size="3" color="white">
+                            {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                        </font>
+                    </ion-item>
+                    <ion-item class="listErrorSpecific" *ngFor="let errorsList of listErrorsBISNSValidation; let i = index;" text-wrap>
+                        <font size="3" color="white">
+                            {{ i+1 }}. {{ errorsList.mensagemErro }}
+                        </font>
+                    </ion-item>
+                </ion-list>
+
+                <ion-label id="nomeFalecido" class="labelStyle">
+                    Nome do Falecido
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="nomeFalecido">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="2" type="text" [disabled]="controlDisable" [maxlength]="130" name="nomeFalecido" formControlName="nomeFalecido"></ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nomePai" class="labelStyle">
+                    Nome do Pai
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="nomePai">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="2" type="text" [disabled]="controlDisable" [maxlength]="130" name="nomePai" formControlName="nomePai">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nomeMae" class="labelStyle">
+                    Nome da Mãe
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="nomeMae">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="2" type="text" [disabled]="controlDisable" [maxlength]="130" formControlName="nomeMae" name="nomeMae">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="sexo" class="labelStyle">
+                    Sexo
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="sexo">
+                    <ion-select interface="action-sheet" okText="Seleccionar" class="inputText" [disabled]="controlDisable" placeholder="<Escolher>"
+                        [selectOptions]="selectOptionsSexo" cancelText="Cancelar" formControlName="sexo" (ionChange)="sexoHandler(true)">
+                        <ion-option *ngFor="let ts of list.sexo;" value="{{ts.value}}">
+                            {{ ts.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="estadoCivil" class="labelStyle">
+                    Estado Civil
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="estadoCivil">
+                    <ion-select interface="action-sheet" name="estadoCivil" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsEstadoCivil"
+                        class="inputText" cancelText="Cancelar" formControlName="estadoCivil">
+                        <ion-option *ngFor="let ec of list.estadoCivil" value="{{ec.value}}">
+                            {{ ec.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nascimentoAno" class="labelStyle">
+                    Data de Nascimento
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="nascimentoAno">
+                    <ion-datetime type="date" placeholder="dd-mm-aaaa" class="inputText" min="1880" displayFormat="DD-MM-YYYY" doneText="Seleccionar"
+                        cancelText="Cancelar" cleanText="Limpar"  (ionChange)="dataNascimentoHandler()" formControlName="dataNascimento"
+                        [disabled]="controlDisable || coNormalForm.controls['chkNascDesconhecida'].value">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox class="checkboxBackground" [disabled]="controlDisable" (ionChange)="clearDataNascimento()" formControlName="chkNascDesconhecida"
+                        [checked]="coNormalForm.controls['chkNascDesconhecida'].value">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nacionalidade" class="labelStyle">
+                    Nacionalidade
+                </ion-label>
+
+                <ion-item-divider no-padding name="nacionalidade">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable" [selectOptions]="selectOptionsNacionalidade"
+                        name="nacionalidade" class="inputText" formControlName="nacionalidade">
+                        <ion-option *ngFor="let nc of  nacionalidadeList" value="{{nc.value}}">
+                            {{ nc.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="profissao" class="labelStyle" text-wrap>
+                    Profissão (se reformado colocar a profissão anterior)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="profissao">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="3" [maxlength]="80" [disabled]="controlDisable || coNormalForm.get('chkProfissaoDesconhecida').value"
+                            formControlName="profissao">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox [disabled]="controlDisable" (ionChange)="cleanProfissao()" formControlName="chkProfissaoDesconhecida" [checked]="coNormalForm.controls['chkProfissaoDesconhecida'].value">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label style="font-size: 20px; font-weight: bold;">
+                    Naturalidade
+                </ion-label>
+
+                <div class="grayBorder">
+                </div>
+                <div class="smSpacer"></div>
+
+                <ion-label id="paisNaturalidade" class="labelStyle">
+                    Pa&iacute;s:
+                </ion-label>
+
+                <ion-item-divider no-padding name="paisNaturalidade">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsPais"
+                        class="inputText" formControlName="paisNaturalidade" (ionChange)="paisNaturalidadeHandler()">
+                        <ion-option *ngFor="let p of naturalidadePaisList" value="{{p.value}}">
+                            {{ p.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="distritoNaturalidade" class="labelStyle">
+                    Distrito (em Portugal)
+                </ion-label>
+
+                <ion-item-divider no-padding name="distritoNaturalidade">
+                    <ion-select interface="action-sheet" placeholder="<Escolher>" [selectOptions]="selectOptionsDistrito" cancelText="Cancelar"
+                        class="inputText" [disabled]="controlDisable || blockFieldsNaturalidade" (ionChange)="populateConcelhoNaturalidadeList()"
+                        formControlName="distritoNaturalidade">
+                        <ion-option *ngFor="let dl of naturalidadeDistritoList" value="{{dl.value}}">
+                            {{ dl.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="concelhoNaturalidade" class="labelStyle">
+                    Concelho (em Portugal)
+                </ion-label>
+
+                <ion-item-divider no-padding name="concelhoNaturalidade">
+                    <ion-select interface="action-sheet" placeholder="<Escolher>" [selectOptions]="selectOptionsConcelho" cancelText="Cancelar"
+                        class="inputText" formControlName="concelhoNaturalidade" (ionChange)="populateFreguesiaNaturalidadeList()"
+                        [disabled]="controlDisable || blockFieldsNaturalidade">
+                        <ion-option *ngFor="let cl of naturalidadeConcelhoList" value="{{cl.value}}">
+                            {{ cl.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="freguesiaNaturalidade" class="labelStyle">
+                    Freguesia (em Portugal)
+                </ion-label>
+
+                <ion-item-divider no-padding name="freguesiaNaturalidade">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" [selectOptions]="selectOptionsFreguesia"
+                        formControlName="freguesiaNaturalidade" class="inputText" [disabled]="controlDisable || blockFieldsNaturalidade">
+                        <ion-option *ngFor="let fl of naturalidadeFreguesiaList" value="{{fl.value}}">
+                            {{ fl.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="medSpacer"></div>
+
+                <ion-label style="font-size: 20px; font-weight: bold;">
+                    Resid&ecirc;ncia habitual
+                </ion-label>
+
+                <div class="grayBorder">
+                </div>
+
+                <ion-label id="residencia" class="labelStyle">
+                    Morada
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="residencia">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="4" [maxlength]="80" formControlName="residencia" [disabled]="controlDisable || coNormalForm.get('chkMoradaRDesconhecida').value">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox name="chkMoradaRDesconhecida" [disabled]="controlDisable" (ionChange)="cleanMorada()" [checked]="coNormalForm.controls['chkMoradaRDesconhecida'].value"
+                        formControlName="chkMoradaRDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="paisResidencia" class="labelStyle">
+                    País
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="paisResidencia">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" class="inputText" [disabled]="controlDisable || coNormalForm.controls['chkPaisRDesconhecida'].value"
+                        (ionChange)="paisResidenciaHandler($event)" [selectOptions]="selectOptionsResidenciaPais" name="paisResidencia"
+                        formControlName="paisResidencia">
+                        <ion-option *ngFor="let prl of list.residenciaPais" value='{{prl.value}}'>
+                            {{ prl.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox [disabled]="controlDisable" name="chkPaisRDesconhecida" (click)="onResidenciaCheckDesconhecido('chkPaisRDesconhecida')"
+                        [checked]="coNormalForm.controls['chkPaisRDesconhecida'].value" formControlName="chkPaisRDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="distritoResidencia" class="labelStyle">
+                    Distrito (em PT)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="distritoResidencia">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" class="inputText" [selectOptions]="selectOptionsResidenciaDistrito"
+                        formControlName="distritoResidencia" (ionChange)="populateConcelhoResidenciaList()" [disabled]="controlDisable || blockFieldsResidencia || coNormalForm.get('chkPaisRDesconhecida').value || coNormalForm.get('chkDistritoRDesconhecida').value">
+                        <ion-option *ngFor="let drl of list.residenciaDistrito" value="{{drl.value}}">
+                            {{ drl.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox [checked]="coNormalForm.controls['chkDistritoRDesconhecida'].value" [disabled]="controlDisable || coNormalForm.get('chkPaisRDesconhecida').value || blockDistritoDesconhecido"
+                        (click)="onResidenciaCheckDesconhecido('chkDistritoRDesconhecida')" formControlName="chkDistritoRDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="concelhoResidencia" class="labelStyle">
+                    Concelho (em PT)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="concelhoResidencia">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" class="inputText" [selectOptions]="selectOptionsResidenciaConcelho"
+                        [disabled]="controlDisable || blockFieldsResidencia || coNormalForm.get('chkPaisRDesconhecida').value || this.coNormalForm.get('chkDistritoRDesconhecida').value || this.coNormalForm.get('chkConcelhoRDesconhecida').value"
+                        (ionChange)="populateFreguesiaResidenciaList()" formControlName="concelhoResidencia">
+                        <ion-option *ngFor="let crl of residenciaConcelhoList" value={{crl.value}}>
+                            <ion-label>
+                                {{ crl.label }}
+                            </ion-label>
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox [disabled]="controlDisable || coNormalForm.get('chkPaisRDesconhecida').value || coNormalForm.get('chkDistritoRDesconhecida').value || blockConcelhoDesconhecido"
+                        name="chkConcelhoRDesconhecida" (click)="onResidenciaCheckDesconhecido('chkConcelhoRDesconhecida')" [checked]="coNormalForm.get('chkDistritoRDesconhecida').value"
+                        formControlName="chkConcelhoRDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="freguesiaResidencia" class="labelStyle">
+                    Freguesia (em PT)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="freguesiaResidencia">
+                    <ion-select interface="action-sheet" class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsResidenciaFreguesia"
+                        cancelText="Cancelar" [disabled]="controlDisable || blockFieldsResidencia || coNormalForm.get('chkPaisRDesconhecida').value || coNormalForm.get('chkDistritoRDesconhecida').value || coNormalForm.get('chkConcelhoRDesconhecida').value || coNormalForm.get('chkFreguesiaRDesconhecida').value"
+                        formControlName="freguesiaResidencia">
+                        <ion-option *ngFor="let frl of residenciaFreguesiaList" value={{frl.value}}>
+                            <ion-item text-wrap>
+                                {{ frl.label }}
+                            </ion-item>
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox [disabled]="controlDisable || coNormalForm.get('chkPaisRDesconhecida').value || coNormalForm.get('chkDistritoRDesconhecida').value || coNormalForm.get('chkConcelhoRDesconhecida').value || blockFreguesiaDesconhecido"
+                        (click)="onResidenciaCheckDesconhecido('chkFreguesiaRDesconhecida')" [checked]="coNormalForm.get('chkFreguesiaRDesconhecida').value"
+                        formControlName="chkFreguesiaRDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('obito')">
+                <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                    &Oacute;bito
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="obitoIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!obito">
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="numCodu" class="labelStyle">
+                    IDEvento - Ficha Icare - INEM
+                </ion-label>
+
+                <div>
+                    <ion-item class="inputText">
+                        <ion-input type="text" (ionChange)="avoidSpaceInput(this.coNormalForm.get('numCodu').value,'numCodu', $event, 20)"
+                        [disabled]="controlDisable" [maxlength]="20" formControlName="numCodu" name="numCodu">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label text-wrap style="color: #333333; font-weight:bold; font-size: 15px;">
+                    Obrigatório preencher se houver intervenção do INEM
+                </ion-label>
+                <ion-grid>
+                    <ion-row align-items-center>
+                        <ion-col></ion-col>
+                        <ion-col col-12 col-md-6 col-lg-4 col-xl-3>
+                            <button class="buttonConfirm" width="100%" height="100%" [disabled]="controlDisable ||  !coNormalForm.get('numCodu').value" (click)="getCONormalFichaInemPdf64()">
+                                <img src="assets/img/fichainem.svg" />
+                            </button>
+                        </ion-col>
+                        <ion-col></ion-col>
+                    </ion-row>
+                </ion-grid>
+
+                <div class="smSpacer"></div>
+
+                <div *ngIf="alertsOnInem">
+                    <ion-list class="listAlert">
+                        <div class="smSpacer"></div>
+                        <div text-center>
+                            <img src="assets/img/alert.svg" class="errorSymbol" />
+                        </div>
+                        <ion-item no-lines style="background-color:#fbb03b; margin-top:10px;" *ngFor="let alertsList of listAlertasInem; let i = index"
+                            text-wrap>
+                            <font size="3" color="white">
+                                <b> {{ i+1 }}. </b> {{ alertsList }} </font>
+                        </ion-item>
+                    </ion-list>
+                </div>
+
+                <div *ngIf="errorsOnInem">
+                    <ion-list class="listError">
+                        <div class="smSpacer"></div>
+                        <div text-center>
+                            <img src="assets/img/alert.svg" class="errorSymbol" />
+                        </div>
+                        <ion-item no-lines class="listError" *ngFor="let errorList of listErrorsInem; let i = index" text-wrap>
+                            <font size="3" color="white">
+                                <b> {{ i+1 }}. </b> {{ errorList }} </font>
+                        </ion-item>
+                    </ion-list>
+                </div>
+
+                <ion-label id="tipoObitoSelected" class="labelStyle">
+                    Tipo de &Oacute;bito
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="tipoObitoSelected">
+                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.tipoObito,'tipoObito','Tipo de óbito')"
+                        text-wrap>
+                        <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ tipoObitoLabel }}
+                    </button>
+                </div>
+
+                <div [hidden]="coNormalForm.get('tipoObitoSelected').value !== 8">
+                    <div class="smSpacer"></div>
+                    <ion-label id="descOutroAcidente" class="labelStyle">
+                        Qual?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="descOutroAcidente">
+                        <ion-item class="inputText">
+                            <ion-textarea name="descOutroAcidente" [maxlength]="255" [disabled]="controlDisable" formControlName="descOutroAcidente" rows="3">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="obitoAno" class="labelStyle">
+                    Data do &Oacute;bito
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="obitoAno">
+                    <ion-datetime type="date" placeholder="dd-mm-aaaa" min="1880" class="inputText" displayFormat="DD-MM-YYYY" doneText="Seleccionar" cancelText="Cancelar"
+                        (ionChange)="dataObitoHandler($event)" [disabled]="controlDisable || coNormalForm.get('chkObitoDesconhecida').value"
+                        formControlName="dataObito">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+
+                    <ion-checkbox [checked]="coNormalForm.controls['chkObitoDesconhecida'].value" [disabled]="controlDisable" (ionChange)="clearDataObito()"
+                        name="chkObitoDesconhecida" formControlName="chkObitoDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="horaObito" class="labelStyle">
+                    Hora do &Oacute;bito
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="horaObito">
+                    <ion-datetime type="date" class="inputText" doneText="Seleccionar" cancelText="Cancelar" placeholder="hh:mm" displayFormat="HH:mm"
+                        formControlName="horaObito" [disabled]="controlDisable || coNormalForm.get('chkHoraObitoDesconhecida').value"
+                        id="timeObito" name="horaObito">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <ion-item no-lines>
+                    <ion-label>
+                        Desconhecido
+                    </ion-label>
+                    <ion-checkbox (ionChange)="clearHoraObito()" [disabled]="controlDisable" [checked]="coNormalForm.controls['chkHoraObitoDesconhecida'].value"
+                        name="chkHoraObitoDesconhecida" formControlName="chkHoraObitoDesconhecida">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="localObito" class="labelStyle">
+                    Local do &Oacute;bito
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="localObito">
+                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.localObito,'localObito', 'Local do óbito')"
+                        text-wrap>
+                        <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ localObitoLabel }}
+                    </button>
+                </div>
+
+                <div *ngIf="coNormalForm.get('localObito').value === 2">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="selectEntidadeObito" class="labelStyle">
+                        Tipo Entidade
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="selectEntidadeObito">
+                        <ion-select interface="action-sheet" placeholder="<Escolher>" [disabled]="controlDisable" class="inputText" [selectOptions]="selectOptionsTipoEntidade"
+                            cancelText="Cancelar" (ionChange)="populateInstSaudeList()" formControlName="selectEntidadeObito">
+                            <ion-option *ngFor="let lotel of list.tipoEntidade" value={{lotel.value}}>
+                                {{ lotel.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+                </div>
+
+                <div *ngIf="coNormalForm.get('selectEntidadeObito').value">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="idInstSaude" class="labelStyle">
+                        Instituição de saúde
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <div name="idInstSaude">
+                        <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(instSaudeList,'instSaudeObito', 'Instituição')"
+                            text-wrap>
+                            <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instituicaoSaudeObitoLabel }}
+                        </button>
+                    </div>
+
+                </div>
+                <div *ngIf="coNormalForm.get('selectEntidadeObito').value === 1">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="idServicoObito" class="labelStyle">
+                        Serviço
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="idServicoObito">
+                        <ion-select interface="action-sheet" [disabled]="controlDisable" placeholder="<Escolher>" class="inputText" [selectOptions]="selectOptionsIdServicoObito"
+                            cancelText="Cancelar" (ionChange)="cleanQual()" formControlName="idServicoObito">
+                            <ion-option *ngFor="let sl of list.listServicos" value={{sl.value}}>
+                                {{ sl.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+
+                </div>
+                <div *ngIf="coNormalForm.get('idServicoObito').value === 4">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="servicoObitoOutro" class="labelStyle">
+                        Qual?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="servicoObitoOutro">
+                        <ion-item class="inputText">
+                            <ion-textarea row="2" [disabled]="controlDisable" [maxlength]="45" formControlName="servicoObitoOutro">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+                </div>
+
+                <div *ngIf="coNormalForm.get('localObito').value === 3">
+                    <div class="smSpacer"></div>
+                    <ion-label id="outroLocal" class="labelStyle">
+                        Qual?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="outroLocal">
+                        <ion-item class="inputText">
+                            <ion-textarea [disabled]="controlDisable" rows="3" [maxlength]="100" formControlName="outroLocal">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+
+                </div>
+                <div *ngIf="coNormalForm.get('localObito').value === 3 || coNormalForm.get('localObito').value === 1">
+                    <div class="smSpacer"></div>
+                    <ion-label id="paisLocalObito" class="labelStyle">
+                        País
+                    </ion-label>
+                    <ion-item-divider no-padding name="paisLocalObito">
+                        <ion-select interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable" [selectOptions]="selectOptionsPais"
+                            class="inputText" name="paisLocalObito" (ionChange)="paisLocalObitoHandler()" formControlName="paisLocalObito">
+                            <ion-option *ngFor="let plo of list.residenciaPais" value={{plo.value}}>
+                                {{ plo.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+
+                    <div class="smSpacer"></div>
+                    <ion-label id="distritoLocalObito" class="labelStyle">
+                        Distrito (em PT)
+                        <span *ngIf="coNormalForm.get('localObito').value === 3">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <ion-item-divider no-padding name="distritoLocalObito">
+                        <ion-select interface="action-sheet" cancelText="Cancelar" class="inputText" [selectOptions]="selectOptionsDistrito" [disabled]="controlDisable || coNormalForm.get('chkDistritoLDesconhecida').value || blockFieldLocalObito"
+                            (ionChange)="populateLocalObitoConcelhoList()" formControlName="distritoLocalObito">
+                            <ion-option *ngFor="let dlo of localObitoDistritoList" value={{dlo.value}}>
+                                {{ dlo.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+
+                    <div class="smSpacer"></div>
+                    <ion-item *ngIf="coNormalForm.get('localObito').value === 3" no-lines>
+                        <ion-label>
+                            Desconhecido
+                        </ion-label>
+                        <ion-checkbox formControlName="chkDistritoLDesconhecida" (ionChange)="onLocalObitoCheckDesconhecido('chkDistritoLDesconhecida')"
+                            [disabled]="controlDisable || blockFieldLocalObito" [checked]="coNormalForm.controls['chkDistritoLDesconhecida'].value">
+                        </ion-checkbox>
+                    </ion-item>
+                    <div class="smSpacer"></div>
+                    <ion-label id="concelhoLocalObito" class="labelStyle">
+                        Concelho (em PT)
+                        <span *ngIf="coNormalForm.get('localObito').value === 3">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="concelhoLocalObito">
+                        <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsConcelho" class="inputText" name="concelhoLocalObito"
+                            [disabled]="controlDisable || coNormalForm.get('chkDistritoLDesconhecida').value || coNormalForm.get('chkConcelhoLDesconhecida').value || blockFieldLocalObito"
+                            (ionChange)="populateLocalObitoFreguesiaList()" formControlName="concelhoLocalObito">
+                            <ion-option *ngFor="let clo of localObitoConcelhoList" value={{clo.value}}>
+                                {{ clo.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+
+                    <div class="smSpacer"></div>
+                    <ion-item *ngIf="coNormalForm.get('localObito').value === 3" no-lines>
+                        <ion-label>
+                            Desconhecido
+                        </ion-label>
+                        <ion-checkbox formControlName="chkConcelhoLDesconhecida" (ionChange)="onLocalObitoCheckDesconhecido('chkConcelhoLDesconhecida')"
+                            [disabled]="controlDisable || coNormalForm.get('chkDistritoLDesconhecida').value" [checked]="coNormalForm.controls['chkConcelhoLDesconhecida'].value">
+                        </ion-checkbox>
+                    </ion-item>
+                    <div class="smSpacer"></div>
+                    <ion-label id="freguesiaLocalObito" class="labelStyle">
+                        Freguesia (em PT)
+                        <span *ngIf="coNormalForm.get('localObito').value === 3">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="freguesiaLocalObito">
+                        <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsFreguesia" class="inputText" name="freguesiaLocalObito"
+                            [disabled]="controlDisable || coNormalForm.get('chkDistritoLDesconhecida').value || coNormalForm.get('chkConcelhoLDesconhecida').value || coNormalForm.get('chkFreguesiaLDesconhecida').value || blockFieldLocalObito"
+                            formControlName="freguesiaLocalObito">
+                            <ion-option *ngFor="let dfl of localObitoFreguesiaList" value={{dfl.value}}>
+                                {{ dfl.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+
+                    <div class="smSpacer"></div>
+                    <ion-item *ngIf="coNormalForm.get('localObito').value === 3" no-lines>
+                        <ion-label>
+                            Desconhecido
+                        </ion-label>
+                        <ion-checkbox formControlName="chkFreguesiaLDesconhecida" (ionChange)="onLocalObitoCheckDesconhecido('chkFreguesiaLDesconhecida')"
+                            [disabled]="controlDisable || coNormalForm.get('chkDistritoLDesconhecida').value || coNormalForm.get('chkConcelhoLDesconhecida').value"
+                            [checked]="coNormalForm.controls['chkFreguesiaLDesconhecida'].value">
+                        </ion-checkbox>
+                    </ion-item>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('causasMorte')">
+                <ion-label class="rowStyle" id="outroCmA" style="font-size: 20px; font-weight: bold;">
+                    Causas da Morte
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="causasMorteIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!causasMorte">
+                <div class="smSpacer"></div>
+                <ion-label id="resCovid19" style="font-size: 17px; font-weight: bold; color:red;" text-wrap>
+                    ****AVISO COVID-19**** <br/>
+                    Caso o paciente se encontre infetado ou se suspeite de infecção pelo vírus SARS-CoV-2 por favor preencha o campo 'Paciente Infetado por SARS-CoV-2'
+                </ion-label>
+                <ion-label class="labelStyle" text-wrap>
+                    Paciente Infetado por SARS-CoV-2
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="resCovid19">
+                    <ion-grid [disabled]="controlDisable" radio-group formControlName="resCovid19">
+                        <ion-item>
+                            <ion-label>
+                                Sim
+                            </ion-label>
+                            <ion-radio [disabled]="controlDisable" value="V">
+                            </ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>
+                                N&atilde;o
+                            </ion-label>
+                            <ion-radio [disabled]="controlDisable" value="F">
+                            </ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>
+                                Suspeito
+                            </ion-label>
+                            <ion-radio [disabled]="controlDisable" (ionSelect)="alertResCovid19Suspeito($event)" value="S">
+                            </ion-radio>
+                        </ion-item>
+                    </ion-grid>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-item>
+                    <ion-label class="labelDescription">
+                        Parte I
+                    </ion-label>
+                </ion-item>
+                <ion-item text-wrap>
+                    <ion-label style="font-size: 15px; font-weight: bold;">
+                        Encadeamento de doenças/estados patológicos que provocaram o falecimento. A última linha preenchida deve corresponder à causa
+                        inicial (básica) que originou a sequência de acontecimentos que levaram à morte.
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle" text-wrap>
+                    a) Causa directa: Indicar
+                    <b> qual </b> a doença, traumatismo ou complicação que levou directamente à morte
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="outroCmA">
+                    <ion-item class="inputText">
+                        <ion-textarea [maxlength]="169" name="outroCmA" rows="6" formControlName="outroCmA" [disabled]="controlDisable || blockCausaMorte">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-item text-wrap>
+                    <ion-label class="labelStyle">
+                        Tempo aproximado entre o início da doença e a morte
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="tempoA" class="labelStyle">
+                    Valor
+                </ion-label>
+                <div name="tempoA">
+                    <ion-item class="inputText">
+                        <ion-input type="tel" [maxlength]="3" autocorrect="on" (ionChange)="numberInput(coNormalForm.get('tempoA').value, 'tempoA', $event)"
+                            clearInput [disabled]="controlDisable || blockCausaMorte" formControlName="tempoA">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="unidTempoA" class="labelStyle">
+                    Unidade
+                </ion-label>
+
+                <ion-item-divider no-padding name="unidTempoA">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsUnidade" class="inputText" [disabled]="controlDisable || blockCausaMorte"
+                        formControlName="unidTempoA">
+                        <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                            {{ ta.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="outroCmB" class="labelStyle">
+                    b) Devida ou consecutiva a:
+                </ion-label>
+
+                <div name="outroCmB">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="6" name="outroCmB" [maxlength]="169" type="text" formControlName="outroCmB" [disabled]="controlDisable || blockCausaMorte">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-item text-wrap>
+                    <ion-label class="labelStyle">
+                        Tempo aproximado entre o início da doença e a morte
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="tempoB" class="labelStyle">
+                    Valor
+                </ion-label>
+                <div name="tempoB">
+                    <ion-item class="inputText">
+                        <ion-input type="tel" [maxlength]="3" (ionChange)="numberInput(coNormalForm.get('tempoB').value, 'tempoB', $event)" [maxlength]="3" [disabled]="controlDisable || blockCausaMorte"
+                            formControlName="tempoB">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="unidTempoB" class="labelStyle">
+                    Unidade
+                </ion-label>
+
+                <ion-item-divider no-padding name="unidTempoB">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsUnidade" class="inputText" [disabled]="controlDisable || blockCausaMorte"
+                        formControlName="unidTempoB">
+                        <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                            {{ ta.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="outroCmC" class="labelStyle" text-wrap>
+                    c) Devida ou consecutiva a:
+                </ion-label>
+                <div name="outroCmC">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="6" [maxlength]="169" type="text" formControlName="outroCmC" [disabled]="controlDisable || blockCausaMorte">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-item text-wrap>
+                    <ion-label id="tempoC" class="labelStyle">
+                        Tempo aproximado entre o início da doença e a morte
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Valor
+                </ion-label>
+                <div name="tempoC">
+                    <ion-item class="inputText">
+                        <ion-input type="tel" [maxlength]="3" (ionChange)="numberInput(coNormalForm.get('tempoC').value, 'tempoC', $event)" [disabled]="controlDisable || blockCausaMorte"
+                            formControlName="tempoC">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="unidTempoC" class="labelStyle">
+                    Unidade
+                </ion-label>
+                <ion-item-divider no-padding name="unidTempoC">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsUnidade" class="inputText" [disabled]="controlDisable || blockCausaMorte"
+                        formControlName="unidTempoC">
+                        <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                            {{ ta.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+                <div class="smSpacer"></div>
+
+                <ion-label id="outroCmD" class="labelStyle">
+                    d) Devida ou consecutiva a:
+                </ion-label>
+
+                <div name="outroCmD">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="6" no-lines [maxlength]="169" type="text" formControlName="outroCmD" [disabled]="controlDisable || blockCausaMorte">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-item text-wrap>
+                    <ion-label class="labelStyle">
+                        Tempo aproximado entre o início da doença e a morte
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="tempoD" class="labelStyle">
+                    Valor
+                </ion-label>
+                <div name="tempoD">
+                    <ion-item class="inputText">
+                        <ion-input type="tel" [maxlength]="3" (ionChange)="numberInput(coNormalForm.get('tempoD').value, 'tempoD', $event)" [disabled]="controlDisable || blockCausaMorte"
+                            formControlName="tempoD">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="unidTempoD" class="labelStyle">
+                    Unidade
+                </ion-label>
+
+                <ion-item-divider no-padding name="unidTempoD">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsUnidade" class="inputText" [disabled]="controlDisable || blockCausaMorte"
+                        formControlName="unidTempoD">
+                        <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                            {{ ta.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="bigSpacer"></div>
+                <ion-item no-lines>
+                    <ion-label class="labelDescription">
+                        Parte II
+                    </ion-label>
+                </ion-item>
+                <div class="grayBorder"></div>
+                <div class="smSpacer"></div>
+                <ion-label id="outroCmOutros" text-wrap class="labelStyle">
+                    Outros estados m&oacute;rbidos, n&atilde;o mencionados na Parte I
+                </ion-label>
+
+                <div name="outroCmOutros">
+                    <ion-item class="inputText">
+                        <ion-textarea type="text" rows="4" [maxlength]="169" formControlName="outroCmOutros" [disabled]="controlDisable || blockCausaMorte">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-item text-wrap>
+                    <ion-label class="labelStyle">
+                        Tempo aproximado entre o início da doença e a morte
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Valor
+                </ion-label>
+
+                <div name="outroCmOutros">
+                    <ion-item class="inputText">
+                        <ion-input type="tel" [maxlength]="3" (ionChange)="numberInput(coNormalForm.get('tempoOutros').value, 'tempoOutros', $event)" [disabled]="controlDisable || blockCausaMorte"
+                            formControlName="tempoOutros">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="unidTempoOutros" class="labelStyle">
+                    Unidade
+                </ion-label>
+
+                <ion-item-divider no-padding name="unidTempoOutros">
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [selectOptions]="selectOptionsUnidade" class="inputText" [disabled]="controlDisable || blockCausaMorte"
+                        formControlName="unidTempoOutros">
+                        <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                            {{ ta.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="baseCausaMorte" class="labelStyle" text-wrap>
+                    A causa da morte foi indicada com base em
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="baseCausaMorte">
+                    <button [disabled]="controlDisable" ion-item class="inputText" (click)="listModal(list.causaMorteBaseEm,'causaMorte', 'Causa da morte')"
+                        text-wrap>
+                        <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ causaMorteLabel }}
+                    </button>
+                </div>
+
+                <div *ngIf="coNormalForm.get('baseCausaMorte').value === 2 || coNormalForm.get('baseCausaMorte').value === 3">
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="dataAutopsia" class="labelStyle" text-wrap>
+                        Data que terminou a autópsia (dd-mm-aaaa)
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="dataAutopsia">
+                        <ion-datetime placeholder="dd-mm-aaaa" class="inputText" type="date" doneText="Seleccionar" cancelText="Cancelar" [disabled]="controlDisable"
+                            displayFormat="DD-MM-YYYY" formControlName="dataAutopsia">
+                        </ion-datetime>
+                    </ion-item-divider>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="horaAutopsia" class="labelStyle" text-wrap>
+                        Hora que terminou a autópsia (hh:mm)
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="horaAutopsia">
+                        <ion-datetime placeholder="hh:mm" class="inputText" type="date" doneText="Seleccionar" [disabled]="controlDisable" cancelText="Cancelar"
+                            displayFormat="HH:mm" formControlName="horaAutopsia" value="FimdaAutopsia">
+                        </ion-datetime>
+                    </ion-item-divider>
+
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="numProcessoAutopsia" class="labelStyle" text-wrap>
+                        N.º processo de autópsia médico-legal
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <div name="numProcessoAutopsia">
+                        <ion-input type="text" class="inputText" [disabled]="controlDisable" [maxlength]="25" formControlName="numProcessoAutopsia">
+                        </ion-input>
+                    </div>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="morteOcorreu" class="labelStyle" text-wrap>
+                    Se mulher entre os 10 e 54 anos de idade, a morte ocorreu
+                    <span *ngIf="mandatoryFieldMorteOcorreu">
+                        <font size="4px" color="red"> * </font>
+                    </span>
+                </ion-label>
+
+                <div name="morteOcorreu">
+                    <button ion-item class="inputText" [disabled]="controlDisable || blockFieldMorteOcorreu" (click)="listModal(list.tpMorteMulher,'tpMorteMulher', 'Tipo morte mulher')"
+                        text-wrap>
+                        <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ tpMorteMulherLabel }}
+                    </button>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="inumacaoCremacao" class="labelStyle">
+                    Inuma&ccedil;&atilde;o/Crema&ccedil;&atilde;o
+                </ion-label>
+
+                <ion-item-divider no-padding>
+                    <ion-select interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable" [selectOptions]="selectOptionsInumacao"
+                        class="inputText" formControlName="inumacaoCremacao" (ionChange)="cleanValuesInumacaoCremacao()">
+                        <ion-option *ngFor="let icl of list.inumacaoCremacao" value={{icl.value}}>
+                            {{ icl.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div *ngIf="coNormalForm.get('inumacaoCremacao').value === 2">
+                    <div class="smSpacer"></div>
+                    <ion-label class="labelStyle">
+                        Motivo
+                    </ion-label>
+                    <div>
+                        <ion-textarea rows="2" type="text" class="inputText" [disabled]="controlDisable" [maxlength]="60" formControlName="motivoInumacaoCremacao">
+                        </ion-textarea>
+                    </div>
+                </div>
+                <div class="smSpacer"></div>
+
+                <ion-label id="doencaInfeciosa" class="labelStyle" text-wrap>
+                    Existe doença infeciosa, ou outra circunstância suscetível de transmissão por manipulação de cadáver?
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item-divider no-padding name="doencaInfeciosa">
+                    <ion-select [disabled]="controlDisable" class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsDoencaInfeciosa"
+                        interface="action-sheet" cancelText="Cancelar" formControlName="doencaInfeciosa">
+                        <ion-option value="1">
+                            Sim
+                        </ion-option>
+                        <ion-option value="2">
+                            Não
+                        </ion-option>
+                        <ion-option value="3">
+                            Ignorado
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('medico')">
+                <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                    M&eacute;dico
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="medicoIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!medico">
+                <div class="smSpacer"></div>
+
+                <ion-label id="medicoAssistente" class="labelStyle" text-wrap>
+                    Foi m&eacute;dico assistente do falecido nos sete dias que antecederam a morte?
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="medicoAssistente">
+                    <ion-select [disabled]="controlDisable" class="inputText" placeholder="<Escolher>" interface="action-sheet" [selectOptions]="selectOptionsMedicoAssistente"
+                        cancelText="Cancelar" formControlName="medicoAssistente">
+                        <ion-option value="1">
+                            Sim
+                        </ion-option>
+                        <ion-option value="2">
+                            Não
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label text-wrap id="observacoesInfoClinica" class="labelStyle">
+                    Observações - Informação Clínica
+                </ion-label>
+                <div name="observacoesInfoClinica">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="6" cols="50" [disabled]="controlDisable" [maxlength]="1000" formControlName="observacoesInfoClinica">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="observacoes" class="labelStyle">
+                    Outras observações
+                </ion-label>
+                <div name="observacoes">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="6" cols="50" [disabled]="controlDisable" [maxlength]="1000" formControlName="observacoes">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nomeClinico" class="labelStyle">
+                    Nome Clínico
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="nomeClinico">
+                    <ion-item class="inputMedico">
+                        <ion-input type="text" formControlName="nomeClinico"></ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="numCedulaProfissional" class="labelStyle">
+                    N&#186; c&eacute;dula Profissional
+                </ion-label>
+
+                <div name="numCedulaProfissional">
+                    <ion-item class="inputMedico">
+                        <ion-input type="text" formControlName="numCedulaProfissional"></ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label id="tipoEntidadeSelecionada" class="labelStyle">
+                    Morada Profissional
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="tipoEntidadeSelecionada">
+                    <ion-select class="inputText" [disabled]="controlDisable" placeholder="<Escolher>" interface="action-sheet" cancelText="Cancelar"
+                        [selectOptions]="selectOptionsMoradaProfissional" (ionChange)="clearTipoEntidadeMedico()" formControlName="tipoEntidadeSelecionada">
+                        <ion-option text-wrap *ngFor="let mp of list.tipoEntidades" value="{{mp.value}}">
+                            {{ mp.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div *ngIf="coNormalForm.get('tipoEntidadeSelecionada').value === 1">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="selectEntidade" class="labelStyle">
+                        Tipo Entidade
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <ion-item-divider no-padding name="selectEntidade">
+                        <ion-select placeholder="<Escolher>" [disabled]="controlDisable" class="inputText" interface="action-sheet" cancelText="Cancelar"
+                            (ionChange)="populateMedicoInstSaudeList()" [selectOptions]="selectOptionsTipoEntidadeSelecionada"
+                            formControlName="selectEntidade">
+                            <ion-option *ngFor="let tp of list.tipoEntidade" value={{tp.value}}>
+                                {{ tp.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+                </div>
+
+                <div *ngIf="coNormalForm.get('tipoEntidadeSelecionada').value === 2">
+                    <div class="smSpacer"></div>
+                    <ion-label id="codigoInmlProfissional" class="labelStyle">
+                        Instituição
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="codigoInmlProfissional">
+                        <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.listaINML,'instituicaoMoradaPro', 'Instituição')"
+                            text-wrap>
+                            <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instituicaoMoradaProLabel }}
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="coNormalForm.get('selectEntidade').value === 1 || coNormalForm.get('selectEntidade').value === 2 || coNormalForm.get('selectEntidade').value === 3">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="codigoSaudeProfissional" class="labelStyle">
+                        Instituição de saúde
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <div name="codigoSaudeProfissional">
+                        <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(medicoInstSaudeList,'instSaudeMoradaProfissional','Instituição')"
+                            text-wrap>
+                            <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instituicaoSaudeMoradaProfissionalLabel }}
+                        </button>
+                    </div>
+                </div>
+                <div [hidden]="coNormalForm.get('selectEntidade').value !== 1">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="codigoSaudeProfissionalServico" class="labelStyle">
+                        Serviço
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <div name="codigoSaudeProfissionalServico">
+                        <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.listServicos,'codigoSaudeProfissionalServico','Serviço')"
+                            text-wrap>
+                            <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ servicoLabel }}
+                        </button>
+                    </div>
+                </div>
+                <div [hidden]="coNormalForm.get('codigoSaudeProfissionalServico').value !== 4">
+                    <div class="smSpacer"></div>
+                    <ion-label id="moradaProfissionalServicoOutro" class="labelStyle">
+                        Qual?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="moradaProfissionalServicoOutro">
+                        <ion-item class="inputText">
+                            <ion-textarea rows="3" [disabled]="controlDisable" [maxlength]="45" formControlName="moradaProfissionalServicoOutro">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="moradaProfissional" class="labelStyle" text-wrap>
+                    Unidade / Serviço
+                    <span [hidden]="coNormalForm.get('tipoEntidadeSelecionada').value !== 3">
+                        <font size="4px" color="red"> * </font>
+                    </span>
+                </ion-label>
+
+                <div name="moradaProfissional">
+                    <ion-input [maxlength]="45" [disabled]="controlDisable" class="inputText" formControlName="moradaProfissional">
+                    </ion-input>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="tipoContacto" class="labelStyle">
+                    Tipo de contacto
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <ion-item-divider no-padding name="tipoContacto">
+                    <ion-select interface="action-sheet" placeholder="<Escolher>" [disabled]="controlDisable" cancelText="Cancelar" [selectOptions]="selectOptionsTipoContacto"
+                        class="inputText" formControlName="tipoContacto">
+                        <ion-option *ngFor="let tcml of list.tipoContacto" value={{tcml.value}}>
+                            {{ tcml.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="descContacto" class="labelStyle">
+                    Contacto
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="descContacto">
+                    <ion-input type="text" [disabled]="controlDisable" [maxlength]="40" class="inputText" formControlName="descContacto">
+                    </ion-input>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="emailDispAutopsia" class="labelStyle" text-wrap>
+                    Email de contacto para informação da Decisão do MP, acerca da dispensa da realização da Autópsia Médico-Legal, se aplicável
+                </ion-label>
+                <div name="emailDispAutopsia">
+                    <ion-input type="email" [disabled]="controlDisable" [maxlength]="200" class="inputText" formControlName="emailDispAutopsia">
+                    </ion-input>
+                </div>
+
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('ministerioPublico')">
+                <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                    Minist&eacute;rio Público
+                </ion-label>
+                <ion-icon color="dark" class="iconStyle" [name]="ministerioPublicoIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!ministerioPublico">
+                <div class="smSpacer"></div>
+
+                <ion-label id="nuipc" style="font-size: 17px; font-weight: bold;" stacked>
+                    NUIPC
+                </ion-label>
+
+                <div name="nuipc">
+                    <ion-input type="text" (ionChange)="setToUpperCase(coNormalForm.get('nuipc').value, 'nuipc')" class="inputText" [disabled]="controlFieldsFromNUIPC" [maxlength]="20" class="inputText" formControlName="nuipc">
+                    </ion-input>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="dispensaAutopsia" style="font-size: 17px; font-weight: bold;" stacked>
+                    <strong> Aut&oacute;psia </strong>
+                </ion-label>
+
+                <div name="dispensaAutopsia">
+                    <ion-grid [disabled]="controlFieldsFromNUIPC" radio-group formControlName="dispensaAutopsia">
+                        <ion-item>
+                            <ion-label>
+                                N&atilde;o Dispensa
+                            </ion-label>
+                            <ion-radio [disabled]="controlFieldsFromNUIPC" value="F">
+                            </ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>
+                                Dispensa
+                            </ion-label>
+                            <ion-radio [disabled]="controlFieldsFromNUIPC" value="V">
+                            </ion-radio>
+                        </ion-item>
+                    </ion-grid>
+                </div>
+            </div>
+        </ion-grid>
+
+        <div class="smSpacer"></div>
+
+        <ion-label text-wrap class="labelStyle">
+            Data de Certificação (dd-mm-aaaa)
+            <font size="4px" color="red"> * </font>
+        </ion-label>
+        <div>
+            <ion-input class="inputText" type="text" formControlName="dataEmissao"></ion-input>
+        </div>
+
+        <div class="smSpacer"></div>
+
+        <ion-label class="labelStyle">
+            Hora (hh:mm)
+            <font size="4px" color="red"> * </font>
+        </ion-label>
+        <div>
+            <ion-input class="inputText" type="text" formControlName="horaEmissao">
+            </ion-input>
+        </div>
+    </form>
+
+    <div>
+        <button [disabled]="controlDisable" (click)="onValidateBiNicFields(coNormalForm)" class="buttonSave" type="submit">
+            <img src="assets/img/save.svg" width="130px;" height="50px;" />
+        </button>
+    </div>
+
+</ion-content>
+<div *ngIf="errorsOnValidation || alertsOnValidation">
+    <ion-fab right bottom>
+        <button ion-fab color="dark" (click)="scrollToTop()">
+            <ion-icon name="arrow-dropup"></ion-icon>
+        </button>
+        <div style="height: 20px;"></div>
+        <button ion-fab color="dark" (click)="scrollToBottom()">
+            <ion-icon name="arrow-dropdown"></ion-icon>
+        </button>
+    </ion-fab>
+</div>

@@ -1,0 +1,43 @@
+<ion-header>
+
+  <ion-navbar hideBackButton="true">
+    <ion-title>Sucesso</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-label style="font-size: 17px; font-weight: bold;" text-wrap text-wrap>
+        <div [innerHTML]="msgConfirmacao"></div> 
+  </ion-label>
+
+  <div class="smSpacer"></div>
+
+  <div>
+    <ion-label class="labelDescription">
+      <img src="assets/img/print.svg" item-left width="30px" height="30px" /> Imprimir
+    </ion-label>
+    <div class="greenBorder">
+    </div>
+  </div>
+  <div class="smSpacer"></div>
+  <ion-item class="impressao" (click)="pdfHandler('ImpressaoBIC')">
+    <ion-label class="impressaoDocumentos">
+      Imprimir BIC
+    </ion-label>
+  </ion-item>
+
+  <ion-item class="impressao" (click)="pdfHandler('ImpressaoBICTransporte')">
+    <ion-label class="impressaoDocumentos" text-wrap>
+      BIC/Documento para identificação e transporte de cadáver
+    </ion-label>
+  </ion-item>
+
+</ion-content>
+
+<ion-footer>
+  <div>
+    <button (click)="backToHome()" class="buttonHome">
+      <img src="assets/img/iniciovector.svg" width="100%;" height="50px" item-left/>
+    </button>
+  </div>
+</ion-footer>

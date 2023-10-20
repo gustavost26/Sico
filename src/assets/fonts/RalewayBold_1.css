@@ -1,0 +1,16 @@
+// Roboto Font
+// Google
+// Apache License, version 2.0
+// http://www.apache.org/licenses/LICENSE-2.0.html
+
+$raleway-font-path: $font-path !default;
+
+@font-face {
+  font-family: "RalewayBold_1";
+  src: url("#{$roboto-font-path}/RalewayBold_1.eot");
+  src: url("#{$roboto-font-path}/RalewayBold_1.eot") format("embedded-opentype"),
+    url("#{$roboto-font-path}/RalewayBold_1.woff2") format("woff2"),
+    url("#{$roboto-font-path}/RalewayBold_1.woff") format("woff"),
+    url("#{$roboto-font-path}/RalewayBold_1.ttf") format("truetype"),
+    url("#{$roboto-font-path}/RalewayBold_1.svg#RalewayBold_1") format("svg");
+}

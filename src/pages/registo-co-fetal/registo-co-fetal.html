@@ -1,0 +1,2200 @@
+<ion-header>
+      <ion-navbar>
+            <ion-title>
+                  Registar CO Fetal
+            </ion-title>
+      </ion-navbar>
+</ion-header>
+<ion-content class="has-header">
+      <div *ngIf="errorsOnValidation">
+            <ion-list class="listError">
+                  <div text-center>
+                        <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;">
+                  </div>
+                  <ion-item no-lines class="listError" (click)="clickToTheField(errorsList.camposErro)" *ngFor="let errorsList of listErrorsValidation.slice(0); let i = index"
+                        text-wrap>
+                        <font size="3" color="white">
+                              <b> {{ i+1 }}. </b> {{ errorsList.mensagemErro }} </font>
+                  </ion-item>
+            </ion-list>
+      </div>
+      <div *ngIf="alertsOnValidation">
+            <ion-list class="listAlert">
+                  <div class="smSpacer"></div>
+                  <div text-center>
+                        <img src="assets/img/alert.svg" class="errorSymbol" />
+                  </div>
+                  <ion-item no-lines style="background-color:#fbb03b; margin-top:10px;" (click)="clickToTheField(alertsList.camposAlerta)"
+                        *ngFor="let alertsList of listAlertsValidation.slice(0); let i = index" text-wrap>
+                        <font size="3" color="white">
+                              <b> {{ i+1 }}. </b> {{ alertsList.mensagemAlerta }} </font>
+                  </ion-item>
+            </ion-list>
+      </div>
+      <ion-item text-wrap no-lines>
+            <ion-label style="font-size: 17px; font-weight: bold;" stacked>
+                  A ser utilizado no caso de fetos mortos com 22 ou mais semanas e óbitos de crianças com menos de 28 dias de idade
+            </ion-label>
+      </ion-item>
+
+      <div *ngIf="showSubmitMessage">
+            <ion-label>
+                  <ion-item text-wrap>
+                        Atenção: Após carregar na tecla 'Confirmar' os dados serão gravados na base de dados. Tem 1 hora para efetuar quaisquer retificações,
+                        recorrendo à opção Alterar/Retificar CO (a complementação tem que ser feita no computador, portátil
+                        ou outro). Após 1 hora este CO irá ser enviado para a conservatória e deixará de ser possível complementá-lo
+                        (é necessário contactar helpdesk SICO para verificar estado do CO na conservatória).
+                  </ion-item>
+            </ion-label>
+            <ion-grid>
+                  <div (click)="onSubmitData()">
+                        <button class="buttonConfirm">
+                              <img src="assets/img/confirmar.svg" width="100%" height="100%" />
+                        </button>
+                  </div>
+
+                  <div class="smSpacer"></div>
+                  <div (click)="onCancel()">
+                        <button class="buttonConfirm">
+                              <img src="assets/img/cancelar.svg" width="100%;" height="100%;" />
+                        </button>
+                  </div>
+            </ion-grid>
+            <div class="bigSpacer"></div>
+      </div>
+
+      <form novalidate padding [formGroup]="coFetalForm">
+
+            <ion-label class="labelStyle" text-wrap>
+                  Identificação do Boletim de Informação Clínica
+            </ion-label>
+            <div class="smSpacer"></div>
+            <ion-grid>
+                  <ion-label id="numBIC" class="labelStyle">
+                        <strong> Nº do BIC &emsp;</strong>
+                        <ion-icon color="secondary" style="font-size:30px" *ngIf="showCheckIconBIC" [name]="checkicon"></ion-icon>
+                        <ion-icon color="danger" style="font-size:30px" [name]="closeicon" *ngIf="showCloseIconBIC"></ion-icon>
+                  </ion-label>
+                  <div name="numBIC">
+
+                        <ion-item-divider class="inputSearchText">
+                              <ion-input type="tel" min="0" [maxlength]="12" (ionChange)="numberInput(this.coFetalForm.get('numBIC').value,'numBIC', $event)"
+                                    (ionBlur)="onBlur($event)" [disabled]="controlDisable" formControlName="numBIC">
+                              </ion-input>
+
+                              <button ion-button clear [disabled]="controlDisable" (click)="getDataBICHandler()" item-right>
+                                    <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                              </button>
+                        </ion-item-divider>
+                  </div>
+                  <div class="smSpacer"></div>
+                  <div>
+                        <ion-list>
+                              <ion-item class="listAlertSpecific" (click)="clickToTheField(alertsList.camposAlerta)" *ngFor="let alertsList of listAlertsBICValidation; let i = index;" text-wrap>
+                                    <font size="3" color="white">
+                                          {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                                    </font>
+                              </ion-item>
+                              <ion-item class="listErrorSpecific" (click)="clickToTheField(errorsList.camposErro)" *ngFor="let errorsList of listErrorsBICValidation; let i = index;" text-wrap>
+                                    <font size="3" color="white">
+                                          {{ i+1 }}. {{ errorsList.mensagemErro }}
+                                    </font>
+                              </ion-item>
+                        </ion-list>
+                  </div>
+            </ion-grid>
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('identFale')">
+
+                        <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;" text-wrap>
+                              Identificação do Feto ou Criança
+                        </ion-label>
+                        <ion-icon color="dark" class="iconStyle" [name]="identicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+
+                  <div [hidden]="!identFale">
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="numBI" class="labelStyle">
+                              N.º identificação civil &emsp;
+                              <ion-icon color="secondary" style="font-size:30px" *ngIf="showCheckMarkIcon" [name]="checkicon"></ion-icon>
+                              <ion-icon color="danger" style="font-size:30px" [name]="closeicon" *ngIf="showCloseIcon"></ion-icon>
+                        </ion-label>
+
+                        <div name="numBI">
+                              <ion-item-divider class="inputSearchText">
+                                    <ion-input type="tel" min="0" [maxlength]="8" (ionBlur)="onBlur($event)" (ionChange)="numberInput(this.coFetalForm.get('numBI').value,'numBI', $event)"
+                                          [disabled]="controlDisable" formControlName="numBI">
+                                    </ion-input>
+                                    <button ion-button clear [disabled]="controlDisable" (click)="getDadosFalecidoCOFetalHandler()" item-right>
+                                          <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                                    </button>
+                              </ion-item-divider>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="numUtente" class="labelStyle">
+                              N.º utente do SNS &emsp;
+                              <ion-icon color="secondary" style="font-size:30px" *ngIf="showCheckMarkIcon" [name]="checkicon"></ion-icon>
+                              <ion-icon color="danger" style="font-size:30px" [name]="closeicon" *ngIf="showCloseIcon"></ion-icon>
+                        </ion-label>
+
+                        <div name="numUtente">
+                              <ion-item-divider class="inputSearchText">
+                                    <ion-input type="tel" min="0" [maxlength]="9" (ionBlur)="onBlur($event)" (ionChange)="numberInput(this.coFetalForm.get('numUtente').value,'numUtente', $event)"
+                                          [disabled]="controlDisable" formControlName="numUtente">
+                                    </ion-input>
+
+                                    <button ion-button clear [disabled]="controlDisable" (click)="getDadosFalecidoCOFetalHandler()" item-right>
+                                          <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                                    </button>
+                              </ion-item-divider>
+                        </div>
+
+                        <div>
+                              <div class="smSpacer"></div>
+                              <ion-list>
+                                    <ion-item class="listAlertSpecific" *ngFor="let alertsList of listAlertsBISNSValidation; let i = index;" text-wrap>
+                                          <font size="3" color="white">
+                                                {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                                          </font>
+                                    </ion-item>
+                                    <ion-item class="listErrorSpecific" *ngFor="let errorsList of listErrorsBISNSValidation; let i = index;" text-wrap>
+                                          <font size="3" color="white">
+                                                {{ i+1 }}. {{ errorsList.mensagemErro }}
+                                          </font>
+                                    </ion-item>
+                              </ion-list>
+                        </div>
+
+                        <ion-label id="nome" class="labelStyle">
+                              Nome
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+                        <div name="nome">
+                              <ion-item class="inputText">
+                                    <ion-textarea rows="2" type="text" [disabled]="controlDisable" [maxlength]="130" formControlName="nome" name="nome">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <ion-label id="nomePai" class="labelStyle">
+                              Nome do Pai
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+                        <div name="nomePai">
+                              <ion-item class="inputText">
+                                    <ion-textarea rows="2" type="text" [disabled]="controlDisable" [maxlength]="130" formControlName="nomePai">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <ion-label id="nomeMae" class="labelStyle">
+                              Nome da Mãe
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+                        <div name="nomeMae">
+                              <ion-item class="inputText">
+                                    <ion-textarea rows="2" type="text" [disabled]="controlDisable" [maxlength]="130" formControlName="nomeMae" name="nomeMae">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <ion-label id="sexo" class="labelStyle">
+                              Sexo
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="sexo">
+                              <ion-select interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable" placeholder="<Escolher>" [selectOptions]="selectOptionsSexo"
+                                    class="inputText" formControlName="sexo">
+                                    <ion-option *ngFor="let ts of list.sexo;" value="{{ts.value}}">
+                                          {{ ts.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+                  </div>
+            </ion-grid>
+
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('obito')">
+                        <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                              &Oacute;bito
+                        </ion-label>
+                        <ion-icon color="dark" style="font-weight: bolder; float:right;  font-size: 35px;" [name]="obitoicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+                  <div [hidden]="!obito">
+
+                        <ion-label id="numCodu" class="labelStyle">
+                              IDEvento - Ficha Icare - INEM
+                        </ion-label>
+
+                        <div>
+                              <ion-item class="inputText">
+                                    <ion-input type="text" (ionChange)="avoidSpaceInput(this.coFetalForm.get('numCodu').value,'numCodu', $event, 20)"
+                                          [disabled]="controlDisable" [maxlength]="20" formControlName="numCodu" name="numCodu">
+                                    </ion-input>
+                              </ion-item>
+                          </div>
+
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label text-wrap style="color: #333333; font-weight:bold; font-size: 15px;">
+                              Obrigatório preencher se houver intervenção do INEM
+                        </ion-label>
+
+                        <ion-grid>
+                              <ion-row align-items-center>
+                                    <ion-col></ion-col>
+                                    <ion-col col-12 col-md-6 col-lg-4 col-xl-3>
+                                          <button class="buttonConfirm" width="100%" height="100%" [disabled]="controlDisable || !coFetalForm.get('numCodu').value" (click)="getCOFetalFichaInemPdf64()">
+                                                <img src="assets/img/fichainem.svg" />
+                                          </button>
+                                    </ion-col>
+                                    <ion-col></ion-col>
+                              </ion-row>
+                        </ion-grid>
+
+                        <div *ngIf="alertsOnInem">
+                              <ion-list class="listAlert">
+                                    <div class="smSpacer"></div>
+                                    <div text-center>
+                                          <img src="assets/img/alert.svg" class="errorSymbol" />
+                                    </div>
+                                    <ion-item no-lines style="background-color:#fbb03b; margin-top:10px;" *ngFor="let alertsList of listAlertasInem; let i = index"
+                                          text-wrap>
+                                          <font size="3" color="white">
+                                                <b> {{ i+1 }}. </b> {{ alertsList }} </font>
+                                    </ion-item>
+                              </ion-list>
+                        </div>
+
+                        <div *ngIf="errorsOnInem">
+                              <ion-list class="listError">
+                                    <div class="smSpacer"></div>
+                                    <div text-center>
+                                          <img src="assets/img/alert.svg" class="errorSymbol" />
+                                    </div>
+                                    <ion-item no-lines class="listError" *ngFor="let errorList of listErrorsInem; let i = index" text-wrap>
+                                          <font size="3" color="white">
+                                                <b> {{ i+1 }}. </b> {{ errorList }} </font>
+                                    </ion-item>
+                              </ion-list>
+                        </div>
+
+                        <ion-label id="tipoObito" class="labelStyle">
+                              Tipo de &Oacute;bito
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="tipoObito">
+                              <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.tipoObito,'tipoObito','Tipo de óbito')"
+                                    text-wrap>
+                                    <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ tipoObitoLabel }}
+                              </button>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['tipoObitoSelected'].value !== 8">
+                              <ion-label id="descOutroAcidente" class="labelStyle">
+                                    Qual?
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="descOutroAcidente">
+                                    <ion-item class="inputText">
+                                          <ion-textarea rows="3" [disabled]="controlDisable" formControlName="descOutroAcidente" [maxlength]="250" type="text">
+                                          </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="estadoNasc" class="labelStyle">
+                              A criança nasceu
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="estadoNasc">
+                              <ion-select class="inputText" interface="action-sheet" [disabled]="controlDisable" placeholder="<Escolher>" cancelText="Cancelar"
+                                    [selectOptions]="selectOptionsCriancaNasceu" (ionChange)="cleanCriancaNasceu()" formControlName="estadoNasc">
+                                    <ion-option *ngFor="let estnas of list.estadoNasc" value={{estnas.value}}>
+                                          {{ estnas.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div [hidden]="coFetalForm.controls['estadoNasc'].value !== 2">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="nascimentoAnoMorta" class="labelStyle">
+                                    Data de nascimento
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="nascimentoAnoMorta">
+                                    <ion-datetime class="inputText" placeholder="dd-mm-aaaa" type="date" min="{{ dataPickerMin }}" displayFormat="DD-MM-YYYY" doneText="Seleccionar" cancelText="Cancelar"
+                                          [disabled]="controlDisable || coFetalForm.controls['chkNascMorta'].value" (ionChange)="nascimentoMortaDateHandler()"
+                                          formControlName="nascimentoMorta">
+                                    </ion-datetime>
+                              </ion-item-divider>
+
+                              <ion-item no-lines>
+                                    <ion-label>
+                                          Desconhecido
+                                    </ion-label>
+
+                                    <ion-checkbox [checked]="coFetalForm.controls['chkNascMorta'].value" [disabled]="controlDisable" (ionChange)="cleanDataNascimentoMorta()"
+                                          formControlName="chkNascMorta">
+                                    </ion-checkbox>
+                              </ion-item>
+
+                              <ion-label id="momentoMorte" class="labelStyle">
+                                    Momento da morte
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="momentoMorte">
+                                    <ion-select class="inputText" interface="action-sheet" placeholder="<Escolher>" cancelText="Cancelar" [disabled]="controlDisable"
+                                          [selectOptions]="selectOptionsMomentodamorte" formControlName="momentoMorte">
+                                          <ion-option *ngFor="let mm of list.momentoMorte" value={{mm.value}}>
+                                                {{ mm.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['estadoNasc'].value !== 1">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="nascimentoAnoViva" class="labelStyle">
+                                    Data de nascimento
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="nascimentoAnoViva">
+                                    <ion-datetime placeholder="dd-mm-aaaa" class="inputText" type="date"  min="{{ dataPickerMin }}" displayFormat="DD-MM-YYYY" doneText="Seleccionar" cancelText="Cancelar"
+                                          [disabled]="controlDisable || coFetalForm.controls['chkNascDesconhecida'].value" (ionChange)="nascimentoVivaHandler()"
+                                          formControlName="nascimentoViva"></ion-datetime>
+                              </ion-item-divider>
+
+                              <ion-label id="horaNascimentoViva" class="labelStyle">
+                                    Hora de nascimento (hh:mm)
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="horaNascimentoViva">
+                                    <ion-item-divider no-padding>
+                                          <ion-datetime placeholder="hh:mm" class="inputText" type="date" doneText="Seleccionar" cancelText="Cancelar" displayFormat="HH:mm"
+                                                [disabled]="controlDisable || coFetalForm.controls['chkNascDesconhecida'].value"
+                                                formControlName="horaNascimentoViva"></ion-datetime>
+                                    </ion-item-divider>
+                              </div>
+
+                              <ion-item no-lines>
+                                    <ion-label id="chkNascDesconhecida">
+                                          Desconhecido
+                                    </ion-label>
+
+                                    <ion-checkbox (ionChange)="cleanCriancaNasceuViva()" [disabled]="controlDisable" name="chkNascDesconhecida" [checked]="coFetalForm.controls['chkNascDesconhecida'].value"
+                                          formControlName="chkNascDesconhecida">
+                                    </ion-checkbox>
+                              </ion-item>
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="anoMorte" class="labelStyle">
+                                    Data de &Oacute;bito
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="anoMorte">
+                                    <ion-item-divider no-padding>
+                                          <ion-datetime placeholder="dd-mm-aaaa" class="inputText" type="date"  min="{{ dataPickerMin }}" displayFormat="DD-MM-YYYY" doneText="Seleccionar" cancelText="Cancelar"
+                                                (ionChange)="dataObitoHandler()" [disabled]="controlDisable || coFetalForm.controls['chkObitoDesconhecida'].value"
+                                                formControlName="dataObitoCrianca"></ion-datetime>
+                                    </ion-item-divider>
+                              </div>
+
+                              <ion-item no-lines>
+                                    <ion-label id="chkObitoDesconhecida">
+                                          Desconhecido
+                                    </ion-label>
+
+                                    <ion-checkbox (ionChange)="cleanDataObito()" [disabled]="controlDisable" name="chkObitoDesconhecida" [checked]="coFetalForm.controls['chkObitoDesconhecida'].value"
+                                          formControlName="chkObitoDesconhecida">
+                                    </ion-checkbox>
+                              </ion-item>
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="horaMorte" class="labelStyle">
+                                    Hora de óbito (hh:mm)
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="horaMorte">
+                                    <ion-item-divider no-padding>
+                                          <ion-datetime placeholder="hh:mm" class="inputText" type="date" doneText="Seleccionar" cancelText="Cancelar" displayFormat="HH:mm"
+                                                [disabled]="controlDisable || coFetalForm.controls['chkHoraObitoDesconhecida'].value"
+                                                formControlName="horaMorte">
+                                          </ion-datetime>
+                                    </ion-item-divider>
+                              </div>
+
+                              <ion-item no-lines>
+                                    <ion-label>
+                                          Desconhecido
+                                    </ion-label>
+                                    <ion-checkbox [checked]="coFetalForm.controls['chkHoraObitoDesconhecida'].value" [disabled]="controlDisable" (ionChange)="cleanHoraObito()"
+                                          formControlName="chkHoraObitoDesconhecida">
+                                    </ion-checkbox>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelDescription">
+                              Índice de Apgar
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-label id="txt_ho_scoreApgar1" class="labelStyle" text-wrap>
+                              1º minuto (0 a 10)
+                        </ion-label>
+
+                        <div name="txt_ho_scoreApgar1">
+                              <ion-input class="inputText" (ionChange)="numberInput(coFetalForm.get('txt_ho_scoreApgar1').value, 'txt_ho_scoreApgar1', $event)"
+                                    formControlName="txt_ho_scoreApgar1" [disabled]="controlDisable || coFetalForm.controls['chkIndiceApgarDesconhecido'].value"
+                                    type="tel" [maxlength]="2">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="txt_ho_scoreApgar5" class="labelStyle">
+                              5º minuto (0 a 10)
+                        </ion-label>
+
+                        <div name="txt_ho_scoreApgar5">
+                              <ion-input class="inputText" (ionChange)="numberInput(coFetalForm.get('txt_ho_scoreApgar5').value, 'txt_ho_scoreApgar5', $event)"
+                                    formControlName="txt_ho_scoreApgar5" [disabled]="controlDisable || coFetalForm.controls['chkIndiceApgarDesconhecido'].value"
+                                    type="tel" [maxlength]="2">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="txt_ho_scoreApgar10" class="labelStyle">
+                              10º minuto (0 a 10)
+                        </ion-label>
+
+                        <div name="txt_ho_scoreApgar10">
+                              <ion-input class="inputText" (ionChange)="numberInput(coFetalForm.get('txt_ho_scoreApgar10').value, 'txt_ho_scoreApgar10', $event)"
+                                    formControlName="txt_ho_scoreApgar10" [disabled]="controlDisable || coFetalForm.controls['chkIndiceApgarDesconhecido'].value"
+                                    type="tel" [maxlength]="2"></ion-input>
+                        </div>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox class="checkboxBackground" [disabled]="controlDisable" [checked]="coFetalForm.controls['chkIndiceApgarDesconhecido'].value"
+                                    (ionChange)="cleanApgar()" formControlName="chkIndiceApgarDesconhecido">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="peso" class="labelStyle">
+                              Peso à nascença (em gramas)
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="peso">
+                              <ion-input class="inputText" formControlName="peso" (ionChange)="numberInput(coFetalForm.get('peso').value, 'peso', $event)" [disabled]="controlDisable || coFetalForm.controls['pesoIgnorado'].value"
+                                    type="tel" [maxlength]="4"></ion-input>
+                        </div>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Ignorado
+                              </ion-label>
+                              <ion-checkbox formControlName="pesoIgnorado" (ionChange)="cleanPeso()" [disabled]="controlDisable" [checked]="coFetalForm.controls['pesoIgnorado'].value">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="partoGemeos" class="labelStyle">
+                              Se nasceu de parto gemelar
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="partoGemeos">
+                              <ion-select class="inputText" [disabled]="controlDisable" [selectOptions]="selectOptionsSenasceudepartogemelar" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="partoGemeos">
+                                    <ion-option *ngFor="let pg of list.partoGemelar" value={{pg.value}}>
+                                          {{ pg.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="localObito" class="labelStyle">
+                              Local do &Oacute;bito
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="localObito" (click)="localObitoInfoAlert()" [ngClass]="{localObitoSelect: !controlDisable}" class="test">
+                              <ion-select #localObitoSelect class="inputText" placeholder="<Escolher>" [disabled]="controlDisable || !alertLocalObitoInfoAux" [selectOptions]="selectOptinsLocaldoObito"
+                                    interface="action-sheet" cancelText="Cancelar" (ionChange)="cleanValuesLocalObito()" formControlName="localObito">
+                                    <ion-option *ngFor="let lol of list.localObito" value={{lol.value}}>
+                                          {{ lol.label }}
+                                    </ion-option>
+                              </ion-select>
+
+                        </ion-item-divider>
+
+                        <div [hidden]="coFetalForm.controls['localObito'].value !== 2">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="selectEntidadeObito" class="labelStyle">
+                                    Tipo Entidade
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="selectEntidadeObito">
+                                    <ion-select class="inputText" [disabled]="controlDisable" placeholder="<Escolher>" [selectOptions]="selectOptinsTipoEntidade"
+                                          interface="action-sheet" cancelText="Cancelar" (ionChange)="populateInstSaudeList()"
+                                          formControlName="selectEntidadeObito">
+                                          <ion-option *ngFor="let lotel of list.tipoEntidade" value={{lotel.value}}>
+                                                {{ lotel.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+                        </div>
+
+                        <div *ngIf="coFetalForm.controls['selectEntidadeObito'].value === 1 || coFetalForm.controls['selectEntidadeObito'].value === 2 || coFetalForm.controls['selectEntidadeObito'].value === 3">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="idInstSaude" class="labelStyle">
+                                    Instituição de saúde
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="idInstSaude">
+                                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(instSaudeList,'instSaudeObito','Instituição')"
+                                          text-wrap>
+                                          <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instituicaoSaudeObitoLabel }}
+                                    </button>
+                              </div>
+                        </div>
+
+                        <div *ngIf="coFetalForm.controls['selectEntidadeObito'].value === 1">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="idServicoObito" class="labelStyle">
+                                    Serviço
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="idServicoObito">
+                                    <ion-item-divider no-padding>
+                                          <ion-select class="inputText" interface="action-sheet" [disabled]="controlDisable" placeholder="<Escolher>" [selectOptions]="selectOptinsServico"
+                                                cancelText="Cancelar" formControlName="idServicoObito">
+                                                <ion-option *ngFor="let ls of list.listaServicos" value={{ls.value}} (ionSelect)="cleanDescServicoObitoOutro()">
+                                                      {{ ls.label }}
+                                                </ion-option>
+                                          </ion-select>
+                                    </ion-item-divider>
+                              </div>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['idServicoObito'].value !== 4">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="descServicoObitoOutro" class="labelStyle">
+                                    Qual?
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="descServicoObitoOutro">
+                                    <ion-item class="inputText">
+                                          <ion-textarea [disabled]="controlDisable" [maxlength]="45" cols="5" rows="2" formControlName="descServicoObitoOutro">
+                                          </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['localObito'].value !== 3">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="descLocalObito" class="labelStyle">
+                                    Qual?
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="descLocalObito">
+                                    <ion-item class="inputText">
+                                          <ion-textarea [disabled]="controlDisable" [maxlength]="90" cols="2" rows="4" formControlName="descLocalObito">
+                                          </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+
+                        <div *ngIf="coFetalForm.controls['localObito'].value === 1 || coFetalForm.controls['localObito'].value === 3">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="descLocalObito" class="labelStyle">
+                                    País
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="descLocalObito">
+                                    <ion-select class="inputText" [selectOptions]="selectOptionsPais" interface="action-sheet" [disabled]="controlDisable" cancelText="Cancelar"
+                                          (ionChange)="countrySelection()" formControlName="paisLocalObito">
+                                          <ion-option *ngFor="let lp of list.listaPaises" value={{lp.value}}>
+                                                {{ lp.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="distritoLocalObito" class="labelStyle">
+                                    Distrito (em PT)
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="distritoLocalObito">
+                                    <ion-select class="inputText" [selectOptions]="selectOptionsDistrito" interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable || blockValuesFromCountry"
+                                          (ionChange)="populateLocalObitoConcelho()" formControlName="distritoLocalObito">
+                                          <ion-option *ngFor="let ld of list.listaDistritos" value={{ld.value}}>
+                                                {{ ld.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="concelhoLocalObito" class="labelStyle">
+                                    Concelho (em PT)
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="concelhoLocalObito">
+                                    <ion-select class="inputText" [selectOptions]="selectOptionsConcelho" interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable || blockValuesFromCountry"
+                                          (ionChange)="populateLocalObitoFreguesia()" formControlName="concelhoLocalObito">
+                                          <ion-option *ngFor="let loc of localObitoConcelhoList" value="{{loc.value}}">
+                                                {{ loc.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="freguesiaLocalObito" class="labelStyle">
+                                    Freguesia (em PT)
+                              </ion-label>
+
+                              <ion-item-divider no-padding name="freguesiaLocalObito">
+                                    <ion-select class="inputText" [selectOptions]="selectOptionsFreguesia" interface="action-sheet" cancelText="Cancelar" [disabled]="controlDisable  || blockValuesFromCountry"
+                                          formControlName="freguesiaLocalObito">
+                                          <ion-option *ngFor="let lof of localObitoFreguesiaList" value="{{lof.value}}">
+                                                {{ lof.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="classificacaoMorte" class="labelStyle">
+                              Classificação da morte
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="classificacaoMorte">
+                              <ion-select class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsClassificacaoMorte"
+                                    interface="action-sheet" cancelText="Cancelar" formControlName="classificacaoMorte" (ionChange)="cleanValuesClassificacaoMorte()">
+                                    <ion-option *ngFor="let cm of list.listaClassMorte" value={{cm.value}}>
+                                          {{ cm.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <div [hidden]="coFetalForm.controls['classificacaoMorte'].value !== 2">
+
+                              <ion-label id="classificacaoMorteMalf" class="labelStyle">
+                                    Malformações
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="classificacaoMorteMalf">
+                                    <ion-item class="inputText">
+                                          <ion-textarea rows="4" [disabled]="controlDisable" [maxlength]="250" type="text" formControlName="classificacaoMorteMalf"></ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+                  </div>
+            </ion-grid>
+
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('causaMorte')">
+                        <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                              Causa da Morte
+                        </ion-label>
+                        <ion-icon color="dark" style="font-weight: bolder; float:right; font-size: 35px;" [name]="causasmorteicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+
+                  <div [hidden]="!causaMorte">
+
+                        <div class="smSpacer"></div>
+                        <ion-label id="resCovid19" style="font-size: 17px; font-weight: bold; color:red;" text-wrap>
+                            ****AVISO COVID-19**** <br/>
+                            Caso o paciente se encontre infetado ou se suspeite de infecção pelo vírus SARS-CoV-2 por favor preencha o campo 'Paciente Infetado por SARS-CoV-2'
+                        </ion-label>
+                        <ion-label class="labelStyle" text-wrap>
+                            Paciente Infetado por SARS-CoV-2
+                            <font size="4px" color="red"> * </font>
+                        </ion-label>
+                        <div name="resCovid19">
+                            <ion-grid [disabled]="controlDisable" radio-group formControlName="resCovid19">
+                                <ion-item>
+                                    <ion-label>
+                                        Sim
+                                    </ion-label>
+                                    <ion-radio [disabled]="controlDisable" value="V">
+                                    </ion-radio>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        N&atilde;o
+                                    </ion-label>
+                                    <ion-radio [disabled]="controlDisable" value="F">
+                                    </ion-radio>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label>
+                                        Suspeito
+                                    </ion-label>
+                                    <ion-radio [disabled]="controlDisable" (ionSelect)="alertResCovid19Suspeito($event)" value="S">
+                                    </ion-radio>
+                                </ion-item>
+                            </ion-grid>
+                        </div>
+
+                        <div class="smSpacer"></div>
+                        <ion-item>
+                              <ion-label class="labelDescription">
+                                    Parte I
+                              </ion-label>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="outroCmA" text-wrap class="labelStyle">
+                              a) Doença ou condição principal no
+                              <b> FETO OU RECÉM-NASCIDO: </b>
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="outroCmA">
+                              <ion-item class="inputText">
+                                    <ion-textarea rows="6" [maxlength]="169" type="text" [disabled]="controlDisable || blockCausaMorte" formControlName="outroCmA">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-item text-wrap>
+                              <ion-label class="labelStyle">
+                                    Tempo aproximado entre o início da doença e a morte
+                              </ion-label>
+                        </ion-item>
+
+                        <ion-label id="tempoA" class="labelStyle">
+                              Valor
+                        </ion-label>
+
+                        <div name="tempoA">
+                              <ion-input class="inputText" type="tel" [maxlength]="3" [disabled]="controlDisable || blockCausaMorte" formControlName="tempoA"
+                                    (ionChange)="numberInput(this.coFetalForm.get('tempoA').value,'tempoA', $event)">
+                              </ion-input>
+                        </div>
+
+                        <ion-label id="unidTempoA" class="labelStyle">
+                              Unidade
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="unidTempoA">
+                              <ion-select class="inputText" [selectOptions]="selectOptionsUnidade" interface="action-sheet" cancelText="Cancelar" formControlName="unidTempoA"
+                                    [disabled]="controlDisable || blockCausaMorte">
+                                    <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                                          {{ ta.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="outroCmB" text-wrap class="labelStyle">
+                              b) Outras doenças ou condições no
+                              <b> FETO OU RECÉM-NASCIDO </b>
+                        </ion-label>
+
+                        <div name="outroCmB">
+                              <ion-item class="inputText">
+                                    <ion-textarea cols="5" rows="6" [maxlength]="169" type="text" [disabled]="controlDisable || blockCausaMorte" formControlName="outroCmB">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-item text-wrap>
+                              <ion-label class="labelStyle">
+                                    Tempo aproximado entre o início da doença e a morte
+                              </ion-label>
+                        </ion-item>
+
+                        <ion-label id="tempoB" class="labelStyle">
+                              Valor
+                        </ion-label>
+
+                        <div name="tempoB">
+                              <ion-input class="inputText" type="tel" [maxlength]="3" [disabled]="controlDisable || blockCausaMorte" formControlName="tempoB"
+                              (ionChange)="numberInput(this.coFetalForm.get('tempoB').value,'tempoB', $event)">
+                              </ion-input>
+                        </div>
+
+                        <ion-label id="unidTempoB" class="labelStyle">
+                              Unidade
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="unidTempoB">
+                              <ion-select class="inputText" [selectOptions]="selectOptionsUnidade" interface="action-sheet" cancelText="Cancelar" formControlName="unidTempoB"
+                                    [disabled]="controlDisable || blockCausaMorte">
+                                    <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                                          {{ ta.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="outroCmC" text-wrap class="labelStyle">
+                              c) Doença ou condição principal
+                              <b> MATERNA </b> que afetou o feto ou recém-nascido (se aplicável):
+                        </ion-label>
+
+                        <div name="outroCmC">
+                              <ion-item class="inputText">
+                                    <ion-textarea cols="5" rows="6" [maxlength]="169" type="text" [disabled]="controlDisable || blockCausaMorte" formControlName="outroCmC">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+                        <ion-item text-wrap>
+                              <ion-label class="labelStyle">
+                                    Tempo aproximado entre o início da doença e a morte
+                              </ion-label>
+                        </ion-item>
+
+                        <ion-label id="tempoC" class="labelStyle">
+                              Valor
+                        </ion-label>
+
+                        <div name="tempoC">
+                              <ion-input class="inputText" type="tel" [maxlength]="3" [disabled]="controlDisable || blockCausaMorte" formControlName="tempoC"
+                                    (ionChange)="numberInput(this.coFetalForm.get('tempoC').value,'tempoC', $event)">
+                              </ion-input>
+                        </div>
+
+                        <ion-label id="unidTempoC" class="labelStyle">
+                              Unidade
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="unidTempoC">
+                              <ion-select class="inputText" [selectOptions]="selectOptionsUnidade" interface="action-sheet" cancelText="Cancelar" formControlName="unidTempoC"
+                                    [disabled]="controlDisable || blockCausaMorte">
+                                    <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                                          {{ ta.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="outroCmD" class="labelStyle" text-wrap>
+                              d) Outras doenças ou condições
+                              <b> MATERNAS </b> que afetaram o feto ou recém-nascido (se aplicável):
+                        </ion-label>
+
+
+                        <div name="outroCmD">
+                              <ion-item class="inputText">
+                                    <ion-textarea cols="5" rows="6" [maxlength]="169" type="text" [disabled]="controlDisable || blockCausaMorte"
+                                          formControlName="outroCmD">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-item text-wrap>
+                              <ion-label class="labelStyle">
+                                    Tempo aproximado entre o início da doença e a morte
+                              </ion-label>
+                        </ion-item>
+
+                        <ion-label id="tempoD" class="labelStyle">
+                              Valor
+                        </ion-label>
+
+                        <div name="tempoD">
+                              <ion-input class="inputText" type="tel" [maxlength]="3" [disabled]="controlDisable || blockCausaMorte" formControlName="tempoD"
+                                    (ionChange)="numberInput(this.coFetalForm.get('tempoD').value,'tempoD', $event)">
+                              </ion-input>
+                        </div>
+
+                        <ion-label id="unidTempoD" class="labelStyle">
+                              Unidade
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="unidTempoD">
+                              <ion-select class="inputText" [selectOptions]="selectOptionsUnidade" interface="action-sheet" cancelText="Cancelar" formControlName="unidTempoD"
+                                    [disabled]="controlDisable || blockCausaMorte">
+                                    <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                                          {{ ta.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="outroCmE" class="labelStyle" text-wrap>
+                              e) Outras circunstâncias relevantes:
+                        </ion-label>
+
+                        <div name="outroCmE">
+                              <ion-item class="inputText">
+                                    <ion-textarea cols="5" rows="6" [maxlength]="169" type="text" [disabled]="controlDisable || blockCausaMorte"
+                                          formControlName="outroCmE">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+                        <ion-item text-wrap>
+                              <ion-label class="labelStyle">
+                                    Tempo aproximado entre o início da doença e a morte
+                              </ion-label>
+                        </ion-item>
+
+                        <ion-label id="tempoE" class="labelStyle">
+                              Valor
+                        </ion-label>
+
+                        <div name="tempoE">
+                              <ion-input class="inputText" type="tel" [maxlength]="3" [disabled]="controlDisable || blockCausaMorte" formControlName="tempoE"
+                                    (ionChange)="numberInput(this.coFetalForm.get('tempoE').value,'tempoE', $event)">
+                              </ion-input>
+                        </div>
+
+                        <ion-label id="unidTempoE" class="labelStyle">
+                              Unidade
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="unidTempoE">
+                              <ion-select class="inputText" [selectOptions]="selectOptionsUnidade" interface="action-sheet" cancelText="Cancelar" formControlName="unidTempoE"
+                                    [disabled]="controlDisable || blockCausaMorte">
+                                    <ion-option *ngFor="let ta of list.unidadeTempo" value={{ta.value}}>
+                                          {{ ta.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="baseCausaMorte" class="labelStyle" text-wrap>
+                              A causa da morte foi indicada com base em
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="baseCausaMorte">
+                              <button [disabled]="controlDisable" ion-item class="inputText" (click)="listModal(list.baseCausaMorte,'causaMorte','Causa da morte')" text-wrap>
+                                    <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ causaMorteLabel }}
+                              </button>
+                        </div>
+
+                        <div *ngIf="coFetalForm.controls['baseCausaMorte'].value === 2 || coFetalForm.controls['baseCausaMorte'].value === 3">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="dataAutopsia" class="labelStyle" text-wrap>
+                                    Data que terminou a autópsia (dd-mm-aaaa)
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="dataAutopsia">
+                                    <ion-item-divider no-padding>
+                                          <ion-datetime class="inputText" placeholder="dd-mm-aaaa" [disabled]="controlDisable" type="date" doneText="Seleccionar" cancelText="Cancelar"
+                                                displayFormat="DD-MM-YYYY" formControlName="dataAutopsia">
+                                          </ion-datetime>
+                                    </ion-item-divider>
+                              </div>
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="horaAutopsia" class="labelStyle" text-wrap>
+                                    Hora que terminou a autópsia (hh:mm)
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="horaAutopsia">
+                                    <ion-item-divider no-padding>
+                                          <ion-datetime placeholder="hh:mm" class="inputText" [disabled]="controlDisable" type="date" doneText="Seleccionar" cancelText="Cancelar"
+                                                displayFormat="HH:mm" formControlName="horaAutopsia">
+                                          </ion-datetime>
+                                    </ion-item-divider>
+                              </div>
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="numProcessoAutopsia" class="labelStyle" text-wrap>
+                                    N.º processo de autópsia médico-legal
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="numProcessoAutopsia">
+                                    <ion-input class="inputText" [disabled]="controlDisable" type="text" [maxlength]="25" formControlName="numProcessoAutopsia">
+                                    </ion-input>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle" text-wrap>
+                              Inumação/Cremação
+                        </ion-label>
+
+                        <ion-item-divider no-padding>
+                              <ion-select class="inputText" [disabled]="controlDisable" [selectOptions]="selectOptionsCremacao" interface="action-sheet"
+                                    cancelText="Cancelar" (ionChange)="cleanMotivo()" formControlName="inumacaoCremacao">
+                                    <ion-option *ngFor="let icl of list.inumacaoCremacao" value={{icl.value}}>
+                                          {{ icl.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div [hidden]="coFetalForm.controls['inumacaoCremacao'].value !== 2">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label class="labelStyle">
+                                    Motivo
+                              </ion-label>
+
+                              <ion-item class="inputText">
+                                    <ion-textarea [disabled]="controlDisable" rows="2" [maxlength]="60" type="text" formControlName="motivoInumCrem">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer">
+                        </div>
+
+                        <ion-label id="doencaInfeciosa" class="labelStyle" text-wrap>
+                              Existe doença infeciosa, ou outra circunstância suscetível de transmissão por manipulação de cadáver?
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="doencaInfeciosa">
+                              <ion-select [selectOptions]="selectOptionsDoencaInfesiosa" [disabled]="controlDisable" class="inputText" placeholder="<Escolher>"
+                                    interface="action-sheet" cancelText="Cancelar" formControlName="doencaInfeciosa">
+                                    <ion-option value="1">
+                                          Sim
+                                    </ion-option>
+                                    <ion-option value="2">
+                                          Não
+                                    </ion-option>
+                                    <ion-option value="3">
+                                          Ignorado
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+                  </div>
+            </ion-grid>
+
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('dadosRelativos')">
+
+                        <ion-label class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                              Dados relativos ao parto
+                        </ion-label>
+                        <ion-icon color="dark" style="font-weight: bolder; float:right;  font-size: 35px;" [name]="dadosrelativosicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+                  <div [hidden]="!dadosRelativos">
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="dataParto" class="labelStyle" text-wrap>
+                              Data (dd-mm-aaaa)
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="dataParto">
+                              <ion-datetime placeholder="dd-mm-aaaa" [disabled]="controlDisable" class="inputText" type="date" doneText="Seleccionar" cancelText="Cancelar"
+                                    displayFormat="DD-MM-YYYY" formControlName="dataParto">
+                              </ion-datetime>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle">
+                              Assistência
+                        </ion-label>
+
+                        <ion-item-divider no-padding>
+                              <ion-select class="inputText" [disabled]="controlDisable" [selectOptions]="selectOptionsAssistencia" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="assistencia">
+                                    <ion-option *ngFor="let asst of list.assistencia" value="{{asst.value}}">
+                                          {{ asst.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle">
+                              Local
+                        </ion-label>
+
+                        <ion-item-divider no-padding>
+                              <ion-select class="inputText" [selectOptions]="selectOptionsLocal" [disabled]="controlDisable" interface="action-sheet" (ionChange)="cleanLocal()"
+                                    cancelText="Cancelar" formControlName="localParto">
+                                    <ion-option *ngFor="let lp of list.localParto" value={{lp.value}}>
+                                          {{ lp.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div [hidden]="coFetalForm.controls['localParto'].value !== 2">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label class="labelStyle">
+                                    Tipo Entidade
+                              </ion-label>
+
+                              <ion-item-divider no-padding>
+                                    <ion-select class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptinsTipoEntidade"
+                                          interface="action-sheet" cancelText="Cancelar" (ionChange)="populateInstSaudePartoList()"
+                                          formControlName="tipoEntidadeParto">
+                                          <ion-option *ngFor="let tp of list.tipoEntidade" value={{tp.value}}>
+                                                {{ tp.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+
+                        </div>
+
+                        <div *ngIf="coFetalForm.controls['tipoEntidadeParto'].value === 1 || coFetalForm.controls['tipoEntidadeParto'].value === 2 || coFetalForm.controls['tipoEntidadeParto'].value === 3">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="idHospitalParto" class="labelStyle">
+                                    Instituição de saúde
+                              </ion-label>
+
+                              <div name="idHospitalParto">
+                                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(LocalObitoPartoList,'instSaudeParto','Instituição')"
+                                          text-wrap style="margin: 0">
+                                          <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instSaudePartoLabel }}
+                                    </button>
+                              </div>
+
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['localParto'].value !== 3">
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="descLocalParto" class="labelStyle">
+                                    Qual?
+                              </ion-label>
+
+                              <div name="descLocalParto">
+                                    <ion-item class="inputText">
+                                          <ion-textarea [disabled]="controlDisable" [maxlength]="45" cols="5" rows="2" formControlName="descLocalParto">
+                                          </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="focoFetal" class="labelStyle">
+                              Foco fetal na admissão
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="focoFetal">
+                              <ion-input class="inputText" type="text" [maxlength]="20" [disabled]="controlDisable || coFetalForm.controls['chkFocoFetalDesconhecido'].value"
+                                    formControlName="focoFetal">
+                              </ion-input>
+                        </div>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox class="checkboxBackground" [disabled]="controlDisable" [checked]="coFetalForm.controls['chkFocoFetalDesconhecido'].value"
+                                    (ionChange)="cleanFocoFetal()" formControlName="chkFocoFetalDesconhecido">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="duracaoParto" class="labelStyle">
+                              Duração do trabalho de parto
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="duracaoParto">
+                              <ion-input class="inputText" [maxlength]="20" type="text" [disabled]="controlDisable || coFetalForm.controls['chkDuracaoPartoDesconhecido'].value"
+                                    name="duracaoParto" formControlName="duracaoParto">
+                              </ion-input>
+                        </div>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox [checked]="coFetalForm.controls['chkDuracaoPartoDesconhecido'].value" [disabled]="controlDisable" (ionChange)="cleanDuracaoParto()"
+                                    formControlName="chkDuracaoPartoDesconhecido">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="naturezaParto" class="labelStyle">
+                              Natureza
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="naturezaParto">
+                              <ion-select class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsNatureza"
+                                    interface="action-sheet" cancelText="Cancelar" formControlName="naturezaParto" (ionChange)="cleanValuesNaturezaParto()">
+                                    <ion-option *ngFor="let np of list.naturezaParto" value={{np.value}}>
+                                          {{ np.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div [hidden]="coFetalForm.controls['naturezaParto'].value !== 1">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="numGemeos" class="labelStyle">
+                                    N.º de gémeos
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="numGemeos">
+                                    <ion-input class="inputText" type="tel" [maxlength]="2" (ionChange)="numberInput(coFetalForm.get('numGemeos').value, 'numGemeos', $event)" [disabled]="controlDisable" formControlName="numGemeos">
+                                    </ion-input>
+                              </div>
+
+                              <ion-label id="numNadosVivos" class="labelStyle">
+                                    N.º de nados-vivos
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="numNadosVivos">
+                                    <ion-input class="inputText" type="tel" [maxlength]="2" (ionChange)="numberInput(coFetalForm.get('numNadosVivos').value, 'numNadosVivos', $event)" [disabled]="controlDisable" formControlName="numNadosVivos">
+                                    </ion-input>
+                              </div>
+
+                              <ion-label id="numFetosMortos" class="labelStyle">
+                                    N.º de fetos-mortos
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="numFetosMortos">
+                                    <ion-input class="inputText" type="tel" [maxlength]="2" (ionChange)="numberInput(coFetalForm.get('numFetosMortos').value, 'numFetosMortos', $event)" [disabled]="controlDisable" formControlName="numFetosMortos">
+                                    </ion-input>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="partoFoi" class="labelStyle">
+                              O parto foi
+                        </ion-label>
+
+                        <div name="partoFoi">
+                              <button class="inputText" ion-item [disabled]="controlDisable" (click)="listModal(list.tipoParto,'partoFoi','O parto foi')"
+                                    text-wrap>
+                                    <ion-icon style="font-size: 20px;" name="arrow-dropdown" ios="md-arrow-dropdown" item-right>
+                                    </ion-icon>
+                                    {{ partoFoiLabel }}
+                              </button>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['tipoParto'].value !== 2">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="outroTipoParto" class="labelStyle">
+                                    Qual?
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="outroTipoParto">
+                                    <ion-item class="inputText">
+                                          <ion-textarea [disabled]="controlDisable" [maxlength]="100" rows="2" type="text" formControlName="outroTipoParto">
+                                          </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle">
+                              <strong> Duração da gravidez </strong>
+                        </ion-label>
+
+                        <ion-label id="duracaoGravidez" class="labelStyle">
+                              Número de semanas completas
+                        </ion-label>
+
+                        <div name="duracaoGravidez">
+                              <ion-input class="inputText" (ionChange)="numberInput(coFetalForm.get('duracaoGravidez').value, 'duracaoGravidez', $event)" type="tel" [maxlength]="2"
+                                    [disabled]="controlDisable || coFetalForm.controls['duracaoGravidezIgnorado'].value" formControlName="duracaoGravidez">
+                              </ion-input>
+                        </div>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Ignorado
+                              </ion-label>
+
+                              <ion-checkbox formControlName="duracaoGravidezIgnorado" [disabled]="controlDisable" (ionChange)="cleanSemanasCompletas()"
+                                    [checked]="coFetalForm.controls['duracaoGravidezIgnorado'].value">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div [hidden]="coFetalForm.controls['duracaoGravidezIgnorado'].value !== true">
+
+                              <ion-label id="descDuracaoMotivo" class="labelStyle">
+                                    Motivo
+                              </ion-label>
+
+                              <div name="descDuracaoMotivo">
+                                    <ion-item class="inputText">
+                                          <ion-textarea [disabled]="controlDisable" formControlName="descDuracaoMotivo" [maxlength]="100">
+                                          </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelVigilancia" text-wrap>
+                              <strong> Vigilância antenatal </strong>
+                        </ion-label>
+
+                        <ion-label id="selectEntidadeObito" text-wrap class="labelStyle">
+                              Houve 3 ou mais consultas médicas?
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="selectEntidadeObito">
+                              <ion-select class="inputText" [disabled]="controlDisable" [selectOptions]="selectOptionsHouveConsultasMedicas" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="vigilanciaAntenatal">
+                                    <ion-option *ngFor="let va of list.vigilanciaAntenatal" value={{va.value}}>
+                                          {{ va.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="indPrimeiraConsulta" class="labelStyle" text-wrap>
+                              A 1ª consulta foi realizada antes da 16ª semana?
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="indPrimeiraConsulta">
+                              <ion-select class="inputText" [disabled]="controlDisable" [selectOptions]="selectOptionsConsultaRealizada" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="indPrimeiraConsulta">
+                                    <ion-option *ngFor="let pc of list.primeiraConsulta" value={{pc.value}}>
+                                          {{ pc.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+                  </div>
+                  <div class="smSpacer"></div>
+            </ion-grid>
+
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('dadosRelativosMae')">
+                        <ion-label class="rowStyle" text-wrap style="font-size: 20px; font-weight: bold;">
+                              Dados relativos à mãe do feto ou da criança
+                        </ion-label>
+                        <ion-icon color="dark" style="font-weight: bolder; float:right; font-size: 35px;" [name]="dadosrelativosmaeicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+                  <div [hidden]="!dadosRelativosMae">
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="dataNascimentoMae" text-wrap class="labelStyle">
+                              Data de nascimento (dd-mm-aaaa)
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="dataNascimentoMae">
+                              <ion-datetime class="inputText" [pickerOptions]="customDataDataNascimentoMaeOptions" [disabled]="controlDisable" placeholder="dd-mm-aaaa" type="date" doneText="Seleccionar" cancelText=""
+                                    displayFormat="DD-MM-YYYY" formControlName="dataNascimentoMae">
+                              </ion-datetime>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="dataPartoAnterior" text-wrap class="labelStyle">
+                              Data do parto imediatamente anterior (dd-mm-aaaa)
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="dataPartoAnterior">
+                              <ion-datetime [disabled]="controlDisable" [pickerOptions]="customDataPartoAnteriorOptions" placeholder="dd-mm-aaaa" class="inputText" type="date" doneText="Seleccionar" cancelText=""
+                                    displayFormat="DD-MM-YYYY" formControlName="dataPartoAnterior">
+                              </ion-datetime>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="patologias" class="labelStyle">
+                              Existência de patologias
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="patologias">
+                              <ion-item-divider no-padding>
+                                    <ion-select [disabled]="controlDisable" class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsExistenciaPatologias"
+                                          interface="action-sheet" cancelText="Cancelar" (ionChange)="cleanValuesPatologias()" formControlName="patologias">
+                                          <ion-option *ngFor="let ep of list.listaDadosCOF" value={{ep.value}}>
+                                                {{ ep.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['patologias'].value !== 1">
+                              <div class="smSpacer"></div>
+                              <ion-list>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Hipertensão arterial
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatHipArt'].value" formControlName="cbPatHipArt"></ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Diabetes Gestacional
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatDiaGes'].value" formControlName="cbPatDiaGes"></ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Diabetes Mellitus Tipo 1
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatDiaMel1'].value" formControlName="cbPatDiaMel1">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Diabetes Mellitus Tipo 2
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatDiaMel2'].value" formControlName="cbPatDiaMel2">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Doença Mental
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatDoeMental'].value" formControlName="cbPatDoeMental">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Doença Neurológica
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatDoeNeuro'].value" formControlName="cbPatDoeNeuro">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Infeção de transmissão sexual
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatInfTransSex'].value" formControlName="cbPatInfTransSex">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Obesidade
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatObesidade'].value" formControlName="cbPatObesidade">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                                    <div>
+                                          <ion-item no-lines text-wrap>
+                                                <ion-label style="font-size:13px" stacked>
+                                                      Outra
+                                                </ion-label>
+                                                <ion-checkbox [disabled]="controlDisable" [checked]="coFetalForm.controls['cbPatOutra'].value" formControlName="cbPatOutra" (ionChange)="cleanValuesPatOutraDesc()">
+                                                </ion-checkbox>
+                                          </ion-item>
+                                    </div>
+                              </ion-list>
+
+                              <div *ngIf="coFetalForm.controls['cbPatOutra'].value">
+
+                                    <ion-label id="patOutraDesc" class="labelStyle">
+                                          Qual?
+                                          <font size="4px" color="red"> * </font>
+                                    </ion-label>
+
+                                    <div name="patOutraDesc">
+                                          <ion-item class="inputText">
+                                                <ion-textarea [disabled]="controlDisable" rows="2" type="text" [maxlength]="100" formControlName="patOutraDesc">
+                                                      </ion-textarea>
+                                          </ion-item>
+                                    </div>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="goodwin" class="labelStyle" text-wrap>
+                              Classificação da gravidez de acordo com a escala de Goodwin (última avaliação)
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="goodwin">
+                              <ion-item-divider no-padding>
+                                    <ion-select class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsGoodwin"
+                                          interface="action-sheet" cancelText="Cancelar" formControlName="goodwin">
+                                          <ion-option *ngFor="let eg of list.listaGoodwin" value={{eg.value}}>
+                                                {{ eg.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle">
+                              N.º de partos de termo
+                        </ion-label>
+
+                        <div name="numPartosTermo">
+                              <ion-input class="inputText" type="tel" [maxlength]="2" [disabled]="controlDisable" (ionChange)="numberInput(coFetalForm.get('numPartosTermo').value, 'numPartosTermo', $event)"
+                                    formControlName="numPartosTermo">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle">
+                              N.º de partos de pré-termo
+                        </ion-label>
+
+                        <div name="numPartosPreTermo">
+                              <ion-input class="inputText" type="tel" [maxlength]="2" [disabled]="controlDisable" (ionChange)="numberInput(coFetalForm.get('numPartosPreTermo').value, 'numPartosPreTermo', $event)"
+                                    formControlName="numPartosPreTermo">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label text-wrap class="labelStyle">
+                              N.º de abortos e gravidezes ectópicas
+                        </ion-label>
+
+                        <div name="numAbortos">
+                              <ion-input class="inputText" type="tel" [maxlength]="2" [disabled]="controlDisable" (ionChange)="numberInput(coFetalForm.get('numAbortos').value, 'numAbortos', $event)"
+                                    formControlName="numAbortos">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelStyle">
+                              N.º de filhos vivos
+                        </ion-label>
+
+                        <div name="numFilhosVivos">
+                              <ion-input class="inputText" type="tel" [maxlength]="2" [disabled]="controlDisable" (ionChange)="numberInput(coFetalForm.get('numFilhosVivos').value, 'numFilhosVivos', $event)"
+                                    formControlName="numFilhosVivos">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelVigilancia" text-wrap>
+                              <strong> Vigilância da gravidez - Nivel de cuidados </strong>
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div class="grayBorder"></div>
+
+                        <ion-label id="vigilCSPrimarios" class="labelStyle" text-wrap>
+                              Cuidados de Saúde Primários
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="vigilCSPrimarios">
+                              <ion-select class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsSaudePrimarios" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="vigilCSPrimarios" [disabled]="controlDisable || coFetalForm.controls['cbSemVigilancia'].value || coFetalForm.controls['cbVigilDesconhecida'].value">
+                                    <ion-option *ngFor="let csp of list.listaDadosCOF" value={{csp.value}}>
+                                          {{ csp.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="vigilCSHospitalares" class="labelStyle" text-wrap>
+                              Cuidados de Saúde Hospitalares
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="vigilCSHospitalares">
+                              <ion-select class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsSaudeHospitalares" interface="action-sheet"
+                                    cancelText="Cancelar" [disabled]="controlDisable || coFetalForm.controls['cbSemVigilancia'].value || coFetalForm.controls['cbVigilDesconhecida'].value"
+                                    formControlName="vigilCSHospitalares">
+                                    <ion-option *ngFor="let csh of list.listaDadosCOF" value={{csh.value}}>
+                                          {{ csh.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="vigilObstPriv" class="labelStyle" text-wrap>
+                              Obstretra Privado
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="vigilObstPriv">
+                              <ion-select class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsObstretaPrivado" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="vigilObstPriv" [disabled]="controlDisable || coFetalForm.controls['cbSemVigilancia'].value || coFetalForm.controls['cbVigilDesconhecida'].value">
+                                    <ion-option *ngFor="let op of list.listaDadosCOF" value={{op.value}}>
+                                          {{ op.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="vigilVPart" class="labelStyle" text-wrap>
+                              Vigilância Partilhada
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="vigilVPart">
+                              <ion-select class="inputText" placeholder="<Escolher>" [selectOptions]="selectOptionsVigilanciaPartilhada" interface="action-sheet"
+                                    cancelText="Cancelar" formControlName="vigilVPart" [disabled]="controlDisable || coFetalForm.controls['cbSemVigilancia'].value || coFetalForm.controls['cbVigilDesconhecida'].value">
+                                    <ion-option *ngFor="let vp of list.listaDadosCOF" value={{vp.value}}>
+                                          {{ vp.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <ion-item no-lines>
+                              <ion-label style="font-size:13px">
+                                    Sem vigilância
+                              </ion-label>
+
+                              <ion-checkbox class="checkboxBackground" [disabled]="controlDisable" formControlName="cbSemVigilancia" (click)="desconhecidoHandler($event)"
+                                    [checked]="vigilanciaCheck">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <ion-item no-lines>
+                              <ion-label style="font-size:13px">
+                                    Desconhecido
+                              </ion-label>
+                              <ion-checkbox [checked]="desconhecidoCheck" [disabled]="controlDisable" (click)="vigilanciaGravidezHandler($event)" formControlName="cbVigilDesconhecida">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label class="labelVigilancia" text-wrap>
+                              <strong> Residência Habitual </strong>
+                        </ion-label>
+
+                        <div class="grayBorder">
+                        </div>
+
+                        <ion-label id="residenciaMorada" class="labelStyle" text-wrap>
+                              Morada
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="residenciaMorada">
+                              <ion-item class="inputText">
+                                    <ion-textarea rows="4" [maxlength]="80" [disabled]="controlDisable || coFetalForm.controls['chkMoradaRDesconhecida'].value"
+                                          formControlName="residenciaMorada">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox [checked]="coFetalForm.controls['chkMoradaRDesconhecida'].value" [disabled]="controlDisable" (ionChange)="cleanMorada()"
+                                    formControlName="chkMoradaRDesconhecida">
+                              </ion-checkbox>
+                        </ion-item>
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="paisResidencia" class="labelStyle">
+                              País
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="paisResidencia">
+                              <ion-select class="inputText" [selectOptions]="selectOptionsPais" interface="action-sheet" (ionChange)="paisResidenciaSelect()"
+                                    cancelText="Cancelar" [disabled]="controlDisable || coFetalForm.controls['chkPaisRDesconhecida'].value"
+                                    formControlName="residenciaPais">
+
+                                    <ion-option *ngFor="let lp of list.listaPaises" value={{lp.value}}>
+                                          {{ lp.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox [checked]="coFetalForm.controls['chkPaisRDesconhecida'].value" [disabled]="controlDisable" (click)="cleanResidenciaHabitual('Pais')"
+                                    formControlName="chkPaisRDesconhecida">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="residenciaDistrito" class="labelStyle">
+                              Distrito (em PT)
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="residenciaDistrito">
+                              <ion-select class="inputText" interface="action-sheet" [selectOptions]="selectOptionsDistrito" cancelText="Cancelar" (ionChange)="populateResidenciaConcelho()"
+                                    formControlName="residenciaDistrito" [disabled]="controlDisable || blockFieldsResidencia || coFetalForm.controls['chkPaisRDesconhecida'].value || coFetalForm.controls['chkDistritoRDesconhecida'].value">
+                                    <ion-option *ngFor="let ld of list.listaDistritos" value="{{ld.value}}">
+                                          {{ ld.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox [checked]="coFetalForm.controls['chkDistritoRDesconhecida'].value" (click)="cleanResidenciaHabitual('Distrito')"
+                                    [disabled]="controlDisable || blockFieldsResidencia || coFetalForm.controls['chkPaisRDesconhecida'].value"
+                                    formControlName="chkDistritoRDesconhecida">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <ion-label id="residenciaConcelho" class="labelStyle">
+                              Concelho (em PT)
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="residenciaConcelho">
+                              <ion-select class="inputText" interface="action-sheet" [selectOptions]="selectOptionsConcelho" cancelText="Cancelar" (ionChange)="populateResidenciaFreguesia()"
+                                    [disabled]="controlDisable || blockFieldsResidencia || coFetalForm.controls['chkPaisRDesconhecida'].value || coFetalForm.controls['chkDistritoRDesconhecida'].value || coFetalForm.controls['chkConcelhoRDesconhecida'].value"
+                                    formControlName="residenciaConcelho">
+                                    <ion-option *ngFor="let rc of residenciaConcelhoList" value={{rc.value}}>
+                                          {{ rc.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox [checked]="coFetalForm.controls['chkConcelhoRDesconhecida'].value" (click)="cleanResidenciaHabitual('Concelho')"
+                                    [disabled]="controlDisable || blockFieldsResidencia || coFetalForm.controls['chkPaisRDesconhecida'].value || coFetalForm.controls['chkDistritoRDesconhecida'].value"
+                                    formControlName="chkConcelhoRDesconhecida">
+                              </ion-checkbox>
+                        </ion-item>
+
+                        <ion-label id="residenciaFreguesia" class="labelStyle">
+                              Freguesia (em PT)
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="residenciaFreguesia">
+                              <ion-select class="inputText" interface="action-sheet" [selectOptions]="selectOptionsFreguesia" cancelText="Cancelar" [disabled]="controlDisable || blockFieldsResidencia || coFetalForm.controls['chkPaisRDesconhecida'].value || coFetalForm.controls['chkDistritoRDesconhecida'].value || coFetalForm.controls['chkConcelhoRDesconhecida'].value || coFetalForm.controls['chkFreguesiaRDesconhecida'].value"
+                                    formControlName="residenciaFreguesia">
+                                    <ion-option *ngFor="let rf of residenciaFreguesiaList" value={{rf.value}}>
+                                          <ion-item>
+                                                {{ rf.label }}
+                                          </ion-item>
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <ion-item no-lines>
+                              <ion-label>
+                                    Desconhecido
+                              </ion-label>
+
+                              <ion-checkbox [checked]="coFetalForm.controls['chkFreguesiaRDesconhecida'].value" (click)="cleanResidenciaHabitual('Freguesia')"
+                                    [disabled]="controlDisable || blockFieldsResidencia || coFetalForm.controls['chkPaisRDesconhecida'].value || coFetalForm.controls['chkDistritoRDesconhecida'].value || coFetalForm.controls['chkConcelhoRDesconhecida'].value"
+                                    formControlName="chkFreguesiaRDesconhecida">
+                              </ion-checkbox>
+                        </ion-item>
+
+                  </div>
+            </ion-grid>
+
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('medico')">
+                        <ion-label class="rowStyle" text-wrap style="font-size: 20px; font-weight: bold;">
+                              Médico
+                        </ion-label>
+                        <ion-icon color="dark" style="font-weight: bolder; float:right;  font-size: 35px;" [name]="medicoicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+                  <div [hidden]="!medico">
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label text-wrap id="observacoesInfoClinica" class="labelStyle">
+                              Observações - Informação Clínica
+                        </ion-label>
+
+                        <div name="observacoesInfoClinica">
+                              <ion-item class="inputText">
+                                    <ion-textarea [disabled]="controlDisable" rows="6" [maxlength]="2000" cols="50" name="observacoesInfoClinica"
+                                          formControlName="observacoesInfoClinica">
+                                    </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="observacoes" class="labelStyle">
+                              Observações
+                        </ion-label>
+
+                        <div name="observacoes">
+                              <ion-item class="inputText">
+                                    <ion-textarea [disabled]="controlDisable" cols="5" [maxlength]="2000" rows="6" formControlName="observacoes">
+                                          </ion-textarea>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="nomeClinico" class="labelStyle">
+                              Nome clínico
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="nomeClinico">
+                              <ion-item class="inputMedico">
+                                    <ion-input type="text" [disabled]="true" formControlName="nomeClinico">
+                                    </ion-input>
+                              </ion-item>
+                        </div>
+
+                        <ion-label id="numCedulaProfissional" class="labelStyle">
+                              N.º cédula profissional
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="numCedulaProfissional">
+                              <ion-item class="inputMedico">
+                                    <ion-input [disabled]="true" type="text" formControlName="numCedulaProfissional">
+                                    </ion-input>
+                              </ion-item>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="tipoEntidadeSelecionada" class="labelStyle">
+                              Morada Profissional
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="tipoEntidadeSelecionada">
+                              <ion-item-divider text-wrap no-padding>
+                                    <ion-select class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsMoradaProfissional"
+                                          interface="action-sheet" (ionChange)="cleanMoradaProfissional()" cancelText="Cancelar"
+                                          formControlName="tipoEntidadeSelecionada">
+                                          <ion-option *ngFor="let mp of list.tipoEntidades" value={{mp.value}}>
+                                                {{ mp.label }}
+                                          </ion-option>
+                                    </ion-select>
+                              </ion-item-divider>
+                        </div>
+
+                        <div [hidden]="coFetalForm.controls['tipoEntidadeSelecionada'].value !== 1">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="selectEntidade" class="labelStyle">
+                                    Tipo Entidade
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="selectEntidade">
+                                    <ion-item-divider no-padding>
+                                          <ion-select class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptinsTipoEntidade"
+                                                interface="action-sheet" cancelText="Cancelar" (ionChange)="populateInstSaudeMoradaProfList()"
+                                                formControlName="selectEntidade">
+                                                <ion-option *ngFor="let tp of list.tipoEntidade" value={{tp.value}}>
+                                                      {{ tp.label }}
+                                                </ion-option>
+                                          </ion-select>
+                                    </ion-item-divider>
+                              </div>
+                        </div>
+
+                        <div *ngIf="coFetalForm.controls['tipoEntidadeSelecionada'].value === 2">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="codigoInmlProfissional" class="labelStyle">
+                                    Instituição
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="codigoInmlProfissional">
+                                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.listaINML,'instituicaoMoradaPro','Instituição')"
+                                          text-wrap>
+                                          <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instituicaoMoradaProfissionalLabel }}
+                                    </button>
+                              </div>
+
+                        </div>
+                        <div *ngIf="coFetalForm.controls['selectEntidade'].value === 1 || coFetalForm.controls['selectEntidade'].value === 2 || coFetalForm.controls['selectEntidade'].value === 3">
+
+                              <div class="smSpacer"></div>
+
+                              <ion-label id="codigoSaudeProfissional" class="labelStyle">
+                                    Instituição de saúde
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="codigoSaudeProfissional">
+                                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(instSaudeMoradaProfList,'instituicaoSaudeMoradaPro','Instituição')"
+                                          text-wrap>
+                                          <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ instituicaoSaudeMoradaProfissionalLabel }}
+                                    </button>
+                              </div>
+
+                        </div>
+                        <div *ngIf="coFetalForm.controls['selectEntidade'].value === 1">
+                              <div class="smSpacer"></div>
+                              <ion-label id="idMoradaProfissionalServicoObito" class="labelStyle">
+                                    Serviço
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="idMoradaProfissionalServicoObito">
+                                    <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(list.listaServicos,'idMoradaProfissionalServicoObito','Serviço')"
+                                          text-wrap>
+                                          <img src="assets/img/setadown.svg" width="10px;" height="10px;" item-right> {{ servicoLabel }}
+                                    </button>
+                              </div>
+                        </div>
+                        <div [hidden]="coFetalForm.controls['idMoradaProfissionalServicoObito'].value !== 4">
+                              <div class="smSpacer"></div>
+                              <ion-label id="descMoradaProfissionalServicoOutro" class="labelStyle">
+                                    Qual?
+                                    <font size="4px" color="red"> * </font>
+                              </ion-label>
+
+                              <div name="descMoradaProfissionalServicoOutro">
+                                    <ion-item class="inputText">
+                                          <ion-textarea [disabled]="controlDisable" cols="5" rows="4" [maxlength]="45" formControlName="descMoradaProfissionalServicoOutro">
+                                                </ion-textarea>
+                                    </ion-item>
+                              </div>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="moradaClinico" class="labelStyle">
+                              Unidade / Serviço
+                              <span *ngIf="coFetalForm.controls['tipoEntidadeSelecionada'].value === 3">
+                                    <font size="4px" color="red"> * </font>
+                              </span>
+                        </ion-label>
+
+                        <div name="moradaClinico">
+                              <ion-input class="inputText" [disabled]="controlDisable" [maxlength]="45" formControlName="moradaClinico">
+                              </ion-input>
+                        </div>
+
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="tipoContacto" class="labelStyle">
+                              Tipo de contacto
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <ion-item-divider no-padding name="tipoContacto">
+                              <ion-select class="inputText" [disabled]="controlDisable" placeholder="<Escolher>" [selectOptions]="selectOptionsTipodecontacto"
+                                    interface="action-sheet" cancelText="Cancelar" formControlName="tipoContacto">
+                                    <ion-option *ngFor="let tc of list.tipoContacto" value={{tc.value}}>
+                                          {{ tc.label }}
+                                    </ion-option>
+                              </ion-select>
+                        </ion-item-divider>
+
+                        <div class="smSpacer"></div>
+                        <ion-label id="descContacto" class="labelStyle">
+                              Contacto
+                              <font size="4px" color="red"> * </font>
+                        </ion-label>
+
+                        <div name="descContacto">
+                              <ion-input class="inputText" [disabled]="controlDisable" type="text" [maxlength]="40" formControlName="descContacto">
+                              </ion-input>
+                        </div>
+                  </div>
+            </ion-grid>
+
+            <ion-grid>
+                  <ion-row align-items-stretch (click)="accordionHandler('ministerioPublico')">
+                        <ion-label text-wrap class="rowStyle" style="font-size: 20px; font-weight: bold;">
+                              Minist&eacute;rio Público
+                        </ion-label>
+                        <ion-icon color="dark" style="font-weight: bolder; float:right;  font-size: 35px;" [name]="ministeriopublicoicon"></ion-icon>
+                        <div class="greenBorder">
+                        </div>
+                  </ion-row>
+                  <div [hidden]="!ministerioPublico">
+                        <div>
+
+                              <ion-label id="nuipc" class="labelStyle">
+                                    NUIPC
+                              </ion-label>
+
+                              <div name="nuipc">
+                                    <ion-input class="inputText" (ionChange)="setToUpperCase(coFetalForm.get('nuipc').value, 'nuipc')" [disabled]="controlFieldsFromNUIPC" type="text"
+                                    [maxlength]="20" formControlName="nuipc">
+                                    </ion-input>
+                              </div>
+
+                        </div>
+                        <div class="smSpacer"></div>
+
+                        <ion-label id="dispensaAutopsia" style="font-size: 17px; font-weight: bold;" stacked>
+                              <strong> Aut&oacute;psia </strong>
+                        </ion-label>
+
+                        <div name="dispensaAutopsia">
+                              <ion-grid radio-group [disabled]="controlFieldsFromNUIPC" formControlName="dispensaAutopsia">
+                                    <ion-item>
+                                          <ion-label>
+                                                N&atilde;o Dispensa
+                                          </ion-label>
+                                          <ion-radio [disabled]="controlFieldsFromNUIPC" value="F">
+                                          </ion-radio>
+                                    </ion-item>
+                                    <ion-item>
+                                          <ion-label>
+                                                Dispensa
+                                          </ion-label>
+                                          <ion-radio [disabled]="controlFieldsFromNUIPC" value="V">
+                                          </ion-radio>
+                                    </ion-item>
+                              </ion-grid>
+                        </div>
+                  </div>
+            </ion-grid>
+
+            <div class="smSpacer"></div>
+
+            <ion-label class="labelStyle">
+                  Data de Certificação
+                  <font size="4px" color="red"> * </font>
+            </ion-label>
+
+            <ion-input class="inputText" [disabled]="true" formControlName="dataEmissao">
+            </ion-input>
+
+            <div class="smSpacer"></div>
+
+            <ion-label class="labelStyle">
+                  Hora
+                  <font size="4px" color="red"> * </font>
+            </ion-label>
+            <ion-input [disabled]="true" class="inputText" formControlName="horaEmissao">
+            </ion-input>
+
+            <div class="smSpacer"></div>
+
+      </form>
+      <div>
+            <button [disabled]="controlDisable" (click)="onValidateBiNicFields(coFetalForm)" class="buttonSave" type="submit">
+                  <img src="assets/img/save.svg" width="130px;" height="50px;" />
+            </button>
+      </div>
+</ion-content>
+<div *ngIf="errorsOnValidation || alertsOnValidation">
+      <ion-fab right bottom>
+            <button ion-fab color="dark" (click)="scrollToTop()">
+                  <ion-icon name="arrow-dropup"></ion-icon>
+            </button>
+            <div style="height: 20px;"></div>
+            <button ion-fab color="dark" (click)="scrollToBottom()">
+                  <ion-icon name="arrow-dropdown"></ion-icon>
+            </button>
+      </ion-fab>
+</div>

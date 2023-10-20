@@ -1,0 +1,44 @@
+page-ajuda {
+  ion-content .scroll {
+    height: 100%;
+  }
+
+  .logo {
+    background-color: transparent;
+    width: 50%;
+    height: 50%;
+  }
+
+  .registoStyle {
+    // padding-bottom: 50px;
+    font-size: 25px;
+    color: white;
+  }
+
+  .imgStyle {
+    padding-bottom: 50px;
+  }
+
+  .slide-zoom {
+    height: 90%;
+  }
+
+  .titleStyle {
+    height: 140px;
+    padding-bottom: 50px;
+  }
+
+  .descriptionStyle {
+    height: 140px;
+  }
+
+  .gridStyle {
+    height: 90%;
+  }
+
+  @media screen and (max-device-width : 320px) {
+    .infoText{
+        padding-top: 0 !important;
+    }
+  }
+}

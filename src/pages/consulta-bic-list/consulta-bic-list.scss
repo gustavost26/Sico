@@ -1,0 +1,64 @@
+page-consulta-bic-list {
+  .smSpacer {
+    height: 20px;
+  }
+
+  .backgroundSearchInput {
+    background-color: #f6f6f6;
+  }
+
+  .inputSearchText {
+    background-color: white;
+    border-top: solid 2px #cccccc;
+    border-bottom: solid 2px #cccccc;
+    border-left: solid 2px #cccccc;
+    border-right: solid 2px #cccccc;
+  }
+
+  .listError {
+    background-color: #d1372f;
+    color: white;
+    padding-top: 1px;
+  }
+
+  .listAlert {
+    background-color: #fbb03b;
+    color: white;
+    padding-top: 1px;
+  }
+
+  .iconStyle {
+    font-weight: bolder;
+    float: right;
+    padding-top: 5px;
+    font-size: 35px;
+  }
+
+  .greenBorder {
+    border-bottom: solid 3px #7dc142;
+    width: 99%;
+  }
+
+  .logoColumn {
+    margin-top: 10%;
+  }
+
+  .labelIntroduction {
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .buttonSearch {
+    background-color: #cbdbf2;
+    color: #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #333333;
+    border-right: 1px solid #333333;
+    border-top: 1px solid #333333;
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    width: 98%;
+  }
+}

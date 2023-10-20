@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Cancelar</button>
+    </ion-buttons>
+
+    <ion-title>
+      <div text-wrap>
+        <b>
+          {{ Description }}
+        </b>
+      </div>
+    </ion-title>
+
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-searchbar placeholder="Pesquisar" animated="true" (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let item of items" (click)="selectedItemList(item.label,item.value)" text-wrap>
+      <h2 padding>{{ item.label }}</h2>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

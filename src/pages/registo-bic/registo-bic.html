@@ -1,0 +1,926 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Registar BIC
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content class="has-header">
+
+    <div *ngIf="alertsOnValidation">
+        <ion-list class="listAlert">
+            <div text-center>
+                <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;" />
+            </div>
+            <ion-item no-lines class="listAlert" (click)="clickToTheField(alertsList.camposAlerta)" *ngFor="let alertsList of listAlertsValidation; let i = index;"
+                text-wrap>
+                <font size="3" color="white">
+                    {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                </font>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div *ngIf="errorsOnValidation">
+        <ion-list class="listError">
+            <div text-center>
+                <img src="assets/img/erro.svg" class="errorSymbol" width="60px;" height="60px;" />
+            </div>
+            <ion-item no-lines class="listError" (click)="clickToTheField(errorsList.camposErro)" *ngFor="let errorsList of listErrorsValidation.slice(0); let i = index"
+                text-wrap>
+                <font size="3" color="white"> {{ i+1 }}. {{ errorsList.mensagemErro }} </font>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <div *ngIf="showSubmitMessage">
+        <ion-label style="font-size: 18px; font-weight: bold;" text-wrap padding>
+            Os dados recolhidos serão registados na base de dados. Deseja continuar o registo?
+        </ion-label>
+        <ion-grid>
+            <div (click)="onSubmitData()">
+                <button class="buttonConfirm">
+                    <img src="assets/img/confirmar.svg" width="100%" height="100%" />
+                </button>
+            </div>
+            <div class="smSpacer"></div>
+            <div (click)="onCancel()">
+                <button class="buttonConfirm">
+                    <img src="assets/img/cancelar.svg" width="100%;" height="100%;" />
+                </button>
+            </div>
+
+        </ion-grid>
+
+    </div>
+
+    <form novalidate [formGroup]="bicForm" padding>
+
+        <ion-grid>
+            <ion-label text-wrap class="labelStyle">
+                Identificação do Certificado de óbito
+            </ion-label>
+
+            <ion-label id="numCO" text-wrap class="labelStyle">
+                N.º certificado de óbito &emsp;
+                <ion-icon item-right color="secondary" style="font-size:40px" *ngIf="showCheckIconBIC" [name]="checkIcon"></ion-icon>
+                <ion-icon item-right color="danger" style="font-size:40px" [name]="closeIcon" *ngIf="showCloseIconBIC"></ion-icon>
+            </ion-label>
+
+            <div name="numCO">
+                <ion-item-divider class="inputSearchText">
+                    <ion-input type="tel" min="0" [maxlength]="10" [disabled]="controlDisable" (ionBlur)="onBlur($event)"
+                        (ionChange)="numberInput(this.bicForm.get('numCO').value,'numCO', $event)" formControlName="numCO">
+                    </ion-input>
+                    <button ion-button clear (click)="getDataCOBic()" item-right>
+                        <img item-right style="background-color: transparent;" src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                    </button>
+                </ion-item-divider>
+            </div>
+
+        </ion-grid>
+
+        <div>
+            <ion-list>
+                <ion-item class="listAlertSpecific" (click)="clickToTheField(alertsList.camposAlerta)" *ngFor="let alertsList of listAlertsBICValidation; let i = index;" text-wrap>
+                    <font size="3" color="white">
+                        {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                    </font>
+                </ion-item>
+                <ion-item class="listErrorSpecific" (click)="clickToTheField(errorsList.camposErro)" *ngFor="let errorsList of listErrorsBICValidation; let i = index;" text-wrap>
+                    <font size="3" color="white">
+                        {{ i+1 }}. {{ errorsList.mensagemErro }}
+                    </font>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('identFale')">
+                <ion-label class="rowStyle" text-wrap style="font-size: 20px; font-weight: bold;">
+                    Identificação do Indíviduo
+                </ion-label>
+                <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:5px; font-size: 35px;" [name]="identFaleIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!identFale">
+                <div class="smSpacer"></div>
+
+                <ion-label id="idCivil" class="labelStyle">
+                    N.º identificação civil &emsp;
+                    <ion-icon item-right color="secondary" style="font-size: 30px" *ngIf="showCheckMarkIcon" [name]="checkIcon"></ion-icon>
+                    <ion-icon item-right color="danger" style="font-size: 30px" [name]="closeIcon" *ngIf="showCloseIcon"></ion-icon>
+                </ion-label>
+
+                <div name="idCivil">
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="tel" min="0" [maxlength]="8" [disabled]="controlDisable" (ionBlur)="onBlur($event)"
+                            (ionChange)="numberInput(this.bicForm.get('idCivil').value,'idCivil', $event)" formControlName="idCivil">
+                        </ion-input>
+
+                        <button ion-button clear item-right (click)="getDadosFalecidoBIC()">
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+                <div class="smSpacer"></div>
+
+                <ion-label id="nUtente" class="labelStyle">
+                    N.º utente do SNS &emsp;
+                    <ion-icon item-right color="secondary" style="font-size: 30px" *ngIf="showCheckMarkIcon" [name]="checkIcon"></ion-icon>
+                    <ion-icon item-right color="danger" style="font-size: 30px" [name]="closeIcon" *ngIf="showCloseIcon"></ion-icon>
+                </ion-label>
+
+                <div name="nUtente">
+                    <ion-item-divider class="inputSearchText">
+                        <ion-input type="tel" min="0" [maxlength]="9" [disabled]="controlDisable" (ionBlur)="onBlur($event)"
+                            (ionChange)="numberInput(this.bicForm.get('nutente').value,'nutente', $event)" formControlName="nutente">
+                        </ion-input>
+                        <button ion-button clear (click)="getDadosFalecidoBIC()" item-right>
+                            <img style="background-color: transparent;" item-right src="assets/img/lupa.svg" width="40px;" height="20px;" />
+                        </button>
+                    </ion-item-divider>
+                </div>
+
+                <div>
+                    <ion-list>
+                        <div class="smSpacer"></div>
+                        <ion-item class="listAlertSpecific" *ngFor="let alertsList of listAlertsBISNSValidation; let i = index;" text-wrap>
+                            <font size="3" color="white">
+                                {{ i+1 }}. {{ alertsList.mensagemAlerta }}
+                            </font>
+                        </ion-item>
+                        <ion-item class="listErrorSpecific" *ngFor="let errorsList of listErrorsBISNSValidation; let i = index;" text-wrap>
+                            <font size="3" color="white">
+                                {{ i+1 }}. {{ errorsList.mensagemErro }}
+                            </font>
+                        </ion-item>
+                    </ion-list>
+                </div>
+
+                <ion-label id="nome" class="labelStyle">
+                    Nome
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="nome">
+                    <ion-item class="inputText">
+                        <ion-textarea [disabled]="controlDisable" rows="2" [maxlength]="130" type="text" formControlName="nome">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nomePai" class="labelStyle">
+                    Nome do Pai
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="nomePai">
+                    <ion-item class="inputText">
+                        <ion-textarea [disabled]="controlDisable" rows="2" [maxlength]="130" type="text" formControlName="nomePai">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="nomeMae" class="labelStyle">
+                    Nome da Mãe
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="nomeMae">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="2" [disabled]="controlDisable" [maxlength]="130" type="text" formControlName="nomeMae">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="profissao" class="labelStyle" text-wrap>
+                    Profissão (se reformado colocar a profissão anterior)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="profissao">
+                    <ion-item class="inputText">
+                        <ion-textarea rows="2" type="text" [maxlength]="80" formControlName="profissao" [disabled]="controlDisable || bicForm.controls['chkProfissaoDesconhecida'].value">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-item no-lines>
+                    <ion-label class="labelStyle">
+                        Desconhecida
+                    </ion-label>
+                    <ion-checkbox formControlName="chkProfissaoDesconhecida" [disabled]="controlDisable" (ionChange)="clearProfissao()" [checked]="bicForm.controls['chkProfissaoDesconhecida'].value">
+                    </ion-checkbox>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="sexo" class="labelStyle">
+                    Sexo
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="sexo">
+                    <ion-select interface="action-sheet" placeholder="<Escolher>" cancelText="Cancelar" [disabled]="controlDisable" [selectOptions]="selectOptionsSexo"
+                        class="inputText" formControlName="sexo" required>
+                        <ion-option *ngFor="let ts of list.listaSexo;" value="{{ts.value}}">
+                            {{ ts.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="anoNascimento" class="labelStyle">
+                    Data nascimento
+                </ion-label>
+
+                <ion-item-divider name="anoNascimento" no-padding>
+                    <ion-datetime placeholder="dd-mm-aaaa" min="1880" type="date" [pickerOptions]="customDataNascimentoOptions" displayFormat="DD-MM-YYYY" class="inputText" doneText="Seleccionar" cancelText=""
+                        [disabled]="controlDisable" (ionChange)="dataNascimentoHandler()" formControlName="dataNascimento" required>
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Estado Civil
+                </ion-label>
+
+                <ion-item-divider no-padding>
+                    <ion-select interface="action-sheet" cancelText="Cancelar" class="inputText" [disabled]="controlDisable" [selectOptions]="selectOptionsEstadoCivil"
+                        formControlName="estadoCivil" required>
+                        <ion-option *ngFor="let ec of list.listaEstadoCivil;" value="{{ec.value}}">
+                            {{ ec.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+                <ion-item no-lines>
+                    <ion-label style="font-size: 20px; font-weight: bold;">
+                        Naturalidade
+                    </ion-label>
+                </ion-item>
+                <div class="grayBorder">
+                </div>
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    País
+                </ion-label>
+
+                <ion-item-divider no-padding>
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsPais"
+                        class="inputText" (ionChange)="paisHandler()" formControlName="pais" required>
+                        <ion-option *ngFor="let p of paisList;" value={{p.value}}>
+                            {{ p.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Distrito (em Portugal)
+                </ion-label>
+
+                <ion-item-divider no-padding>
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" [selectOptions]="selectOptionsDistrito"
+                        class="inputText" (ionChange)="populateConcelhoList()" formControlName="distrito" [disabled]="controlDisable || blockDistrito"
+                        required>
+                        <ion-option *ngFor="let d of distritoList;" value={{d.value}}>
+                            {{ d.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Concelho (em Portugal)
+                </ion-label>
+                <ion-item-divider no-padding>
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" class="inputText" [selectOptions]="selectOptionsConcelho"
+                        (ionChange)="populateFreguesiaList()" formControlName="concelho" [disabled]="controlDisable || blockConcelho"
+                        required>
+                        <ion-option *ngFor="let c of concelhoList;" value={{c.value}}>
+                            {{ c.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Freguesia (em Portugal)
+                </ion-label>
+
+                <ion-item-divider no-padding>
+                    <ion-select interface="action-sheet" cancelText="Cancelar" placeholder="<Escolher>" class="inputText" [selectOptions]="selectOptionsFreguesia"
+                        formControlName="freguesia" [disabled]="controlDisable || blockFreguesia" required>
+                        <ion-option *ngFor="let f of freguesiaList;" value={{f.value}}>
+                            {{ f.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-item text-wrap>
+                    <ion-label style="font-size:18px">
+                        <strong> Contacto familiar </strong>
+                    </ion-label>
+                </ion-item>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="tipoContacto" class="labelStyle">
+                    Tipo contacto
+                </ion-label>
+
+                <ion-item-divider name="tipoContacto" no-padding>
+                    <ion-select interface="action-sheet" class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsTipoContacto"
+                        cancelText="Cancelar" formControlName="tipoContacto" required>
+                        <ion-option *ngFor="let tc of list.listaTipoContactoFamiliar;" value={{tc.value}}>
+                            {{ tc.label }}
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <div>
+                    <ion-label id="contactoFamiliar" class="labelStyle">
+                        Contacto
+                    </ion-label>
+                    <div name="contactoFamiliar">
+                        <ion-input class="inputText" type="text" [disabled]="controlDisable" [maxlength]="40" formControlName="contactoFamiliar">
+                        </ion-input>
+                    </div>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('identCircunstancial')">
+                <ion-label class="rowStyle" text-wrap style="font-size: 20px; font-weight: bold;">
+                    Informação Circunstancial
+                </ion-label>
+                <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:5px; font-size: 35px;" [name]="identCircunstancialIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+
+            <div [hidden]="!identCircunstancial">
+                <div class="smSpacer"></div>
+                <ion-label id="infoAdmissao" text-wrap class="labelStyle">
+                    Informação disponível relativa às circunstâncias anteriores à admissão na instituição de saúde ou ao local de verificação
+                    do óbito, conforme aplicável
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="infoAdmissao">
+                    <ion-textarea [maxlength]="1800" [disabled]="controlDisable" class="inputText" rows="6" formControlName="infoAdmissao">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label id="resCovid19" style="font-size: 17px; font-weight: bold; color:red;" text-wrap>
+                    ****AVISO COVID-19**** <br/>
+                    Caso o paciente se encontre infetado ou se suspeite de infecção pelo vírus SARS-CoV-2 por favor preencha o campo 'Paciente Infetado por SARS-CoV-2'
+                </ion-label>
+                <ion-label class="labelStyle" text-wrap>
+                    Paciente Infetado por SARS-CoV-2
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="resCovid19">
+                    <ion-grid [disabled]="controlDisable" radio-group formControlName="resCovid19">
+                        <ion-item>
+                            <ion-label>
+                                Sim
+                            </ion-label>
+                            <ion-radio [disabled]="controlDisable" value="V">
+                            </ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>
+                                N&atilde;o
+                            </ion-label>
+                            <ion-radio [disabled]="controlDisable" value="F">
+                            </ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>
+                                Suspeito
+                            </ion-label>
+                            <ion-radio [disabled]="controlDisable" (ionSelect)="alertResCovid19Suspeito($event)" value="S">
+                            </ion-radio>
+                        </ion-item>
+                    </ion-grid>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row align-items-stretch (click)="accordionHandler('informacaoClinica')">
+                <ion-label class="rowStyle" text-wrap style="font-size: 20px; font-weight: bold;">
+                    Informação Clínica
+                </ion-label>
+                <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:5px; font-size: 35px;" [name]="informacaoClinicaIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!informacaoClinica">
+                <div class="smSpacer"></div>
+
+                <ion-label class="labelStyle">
+                    Transferido de
+                </ion-label>
+
+                <div>
+                    <ion-item class="inputText">
+                        <ion-textarea rows="2" [disabled]="controlDisable" [maxlength]="45" formControlName="transferidoDe">
+                        </ion-textarea>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label text-wrap id="dataAdmissaoLocalTransf" class="labelStyle">
+                    Data admissão no local de transferência
+                </ion-label>
+
+                <ion-item-divider no-padding name="dataAdmissaoLocalTransf">
+                    <ion-datetime type="date" class="inputText" [pickerOptions]="customDataAdmissaoLocalTransfOptions" [disabled]="controlDisable" placeholder="dd-mm-aaaa" displayFormat="DD-MM-YYYY"
+                        doneText="Seleccionar" cancelText="" (ionChange)="dataAdmissaoLocalTransfHandler()" formControlName="dataAdmissaoLocalTransf">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+                <ion-label text-wrap id="admitidoInstSaude" class="labelStyle">
+                    Admitido em instituição de saúde?
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="admitidoInstSaude">
+                    <ion-select interface="action-sheet" placeholder="<Escolher>" [disabled]="controlDisable" class="inputText" [selectOptions]="selectOptionsAdmitidoInstSaude"
+                        cancelText="Cancelar" formControlName="admitidoInstSaude">
+                        <ion-option value="1">
+                            Sim
+                        </ion-option>
+                        <ion-option value="2">
+                            Não
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="dataAdmissao" class="labelStyle">
+                    Admitido em
+                </ion-label>
+                <ion-item-divider no-padding name="dataAdmissao">
+                    <ion-datetime class="inputText" placeholder="dd-mm-aaaa" [pickerOptions]="customAdmitidoEmOptions" [disabled]="controlDisable" type="date" displayFormat="DD-MM-YYYY"
+                        (ionChange)="dataAdmissaoValuesHandler()" doneText="Seleccionar" cancelText="" formControlName="dataAdmissao">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="horaAdmissao" class="labelStyle">
+                    Hora de admissão
+                </ion-label>
+                <ion-item-divider no-padding name="horaAdmissao">
+                    <ion-datetime class="inputText" type="date" placeholder="hh:mm" [pickerOptions]="customHorasAdmissaoOptions" [disabled]="controlDisable" displayFormat="HH:mm" doneText="Seleccionar"
+                        cancelText="" formControlName="horaAdmissao">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="chegouCadaver" class="labelStyle">
+                    Chegou cádaver
+                    <span *ngIf="bicForm.controls['admitidoInstSaude'].value === 1">
+                        <font size="4px" color="red"> * </font>
+                    </span>
+                </ion-label>
+
+                <ion-item-divider no-padding name="chegouCadaver">
+                    <ion-select interface="action-sheet" placeholder="<Escolher>" [disabled]="controlDisable" [selectOptions]="selectOptionsChegouCadaver"
+                        class="inputText" cancelText="Cancelar" formControlName="chegouCadaver">
+                        <ion-option value="1">
+                            Sim
+                        </ion-option>
+                        <ion-option value="2">
+                            Não
+                        </ion-option>
+                    </ion-select>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+                <ion-label id="anoFalecido" class="labelStyle">
+                    Falecido em
+                </ion-label>
+                <ion-item-divider no-padding name="anoFalecido">
+                    <ion-datetime type="date" min="{{ dataPickerMin }}" displayFormat="DD-MM-YYYY" [pickerOptions]="customOptions" [disabled]="controlDisable" placeholder="dd-mm-aaaa" class="inputText"
+                        doneText="Seleccionar" cancelText="" (ionChange)="dataFalecimentoHandler()" formControlName="dataFalecido">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="horaFalecido" class="labelStyle">
+                    pelas (hh:mm)
+                </ion-label>
+
+                <ion-item-divider no-padding name="horaFalecido">
+                    <ion-datetime type="date" doneText="Seleccionar" [pickerOptions]="customHorasFalecidoOptions" [disabled]="controlDisable" class="inputText" cancelText="" placeholder="hh:mm"
+                        displayFormat="HH:mm" formControlName="horaFalecido">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="anoObito" class="labelStyle">
+                    Óbito verificado em
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="anoObito">
+                    <ion-datetime type="date" min="{{ dataPickerMin }}" displayFormat="DD-MM-YYYY" [disabled]="controlDisable" placeholder="dd-mm-aaaa" class="inputText"
+                        doneText="Seleccionar" cancelText="Cancelar" (ionChange)="dataObitoHandler()" formControlName="dataObito">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+
+                <ion-label id="horaObito" class="labelStyle">
+                    pelas (hh:mm)
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider no-padding name="horaObito">
+                    <ion-datetime type="date" doneText="Seleccionar" [pickerOptions]="customHorasObitoOptions" [disabled]="controlDisable" class="inputText" cancelText="" placeholder="hh:mm"
+                        displayFormat="HH:mm" formControlName="horaObito">
+                    </ion-datetime>
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="situacaoClinica" class="labelStyle">
+                    Situação clínica
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="situacaoClinica">
+                    <ion-textarea class="inputText" [maxlength]="1800" [disabled]="controlDisable" rows="7" formControlName="situacaoClinica">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label text-wrap id="antecedentesGerais" class="labelStyle">
+                    Antecedentes gerais relevantes
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="antecedentesGerais">
+                    <ion-textarea class="inputText" [maxlength]="1800" rows="7" [disabled]="controlDisable" formControlName="antecedentesGerais">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+                <ion-label id="diagnostico" class="labelStyle">
+                    Diagnóstico final ou provável
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="diagnostico">
+                    <ion-textarea class="inputText" [maxlength]="1800" rows="5" [disabled]="controlDisable" formControlName="diagnostico">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label text-wrap class="labelStyle">
+                    Internamento(s) na(s) enfermaria(s) de
+                </ion-label>
+
+                <div>
+                    <ion-textarea class="inputText" rows="4" [disabled]="controlDisable" [maxlength]="100" formControlName="internamentoEnf"></ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="evolucaoClinica" text-wrap class="labelStyle">
+                    Evolução clínica na(s) enfermaria(s)
+                    <span *ngIf="bicForm.controls['chegouCadaver'].value === 2">
+                        <font size="4px" color="red"> * </font>
+                    </span>
+                </ion-label>
+
+                <div name="evolucaoClinica">
+                    <ion-textarea class="inputText" [maxlength]="1800" [disabled]="controlDisable" rows="4" formControlName="evolucaoClinica">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="examesComplementares" text-wrap class="labelStyle">
+                    Exames complementares relevantes
+                    <span *ngIf="bicForm.controls['chegouCadaver'].value === 2">
+                        <font size="4px" color="red"> * </font>
+                    </span>
+                </ion-label>
+
+                <div name="examesComplementares">
+                    <ion-textarea class="inputText" [maxlength]="1800" [disabled]="controlDisable" rows="4" formControlName="examesComplementares">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="terapeuticas" class="labelStyle" text-wrap>
+                    Terapêuticas clínicas e/ou cirúrgicas mais relevantes e/ou manobras de reanimação prestadas
+                    <span *ngIf="bicForm.controls['chegouCadaver'].value === 2">
+                        <font size="4px" color="red"> * </font>
+                    </span>
+                </ion-label>
+
+                <div name="terapeuticas">
+                    <ion-textarea class="inputText" [maxlength]="1800" [disabled]="controlDisable" rows="4" formControlName="terapeuticas">
+                    </ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="prodBio" text-wrap class="labelStyle">
+                    Produtos biológicos colhidos na instituição da saúde
+                </ion-label>
+
+                <div name="prodBio">
+                    <ion-textarea class="inputText" [maxlength]="1800" rows="4" [disabled]="controlDisable" formControlName="prodBio"></ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="vestigios" text-wrap class="labelStyle">
+                    Vestígios e/ou outros elementos colhidos no acto de admissão ou internamento
+                </ion-label>
+
+                <div name="vestigios">
+                    <ion-textarea class="inputText" [maxlength]="1800" rows="4" [disabled]="controlDisable" formControlName="vestigios"></ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="outrosElementos" text-wrap class="labelStyle">
+                    Outros elementos considerados relevantes
+                </ion-label>
+
+                <div name="outrosElementos">
+                    <ion-textarea class="inputText" [maxlength]="1800" rows="7" [disabled]="controlDisable" formControlName="outrosElementos"></ion-textarea>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="observacoes" class="labelStyle">
+                    Observações adicionais
+                </ion-label>
+
+                <div name="observacoes">
+                    <ion-textarea class="inputText" [maxlength]="1800" rows="7" [disabled]="controlDisable" formControlName="observacoes"></ion-textarea>
+                </div>
+            </div>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row style="font-size: 20px; padding-top: 10px; font-weight: bold;" (click)="accordionHandler('identifiMedico')">
+                <ion-label class="rowStyle" text-wrap>
+                    Identificação do Médico que Presta a Informação
+                </ion-label>
+                <ion-icon color="dark" style="font-weight: bolder; float:right; font-size: 35px;" [name]="identifiMedicoIcon"></ion-icon>
+                <div class="greenBorder">
+                </div>
+            </ion-row>
+
+            <div [hidden]="!identifiMedico">
+                <div class="smSpacer"></div>
+
+                <ion-label id="medicoNome" class="labelStyle">
+                    Nome do médico
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="medicoNome">
+                    <ion-item class="inputMedico">
+                        <ion-input type="text" formControlName="medicoNome" [disabled]="true">
+                        </ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="medicoCedulaProf" class="labelStyle">
+                    N.º cédula profissional
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <div name="medicoCedulaProf">
+                    <ion-item class="inputMedico">
+                        <ion-input type="text" formControlName="medicoCedulaProf" [disabled]="true"></ion-input>
+                    </ion-item>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="tipoMoradaProfissional" class="labelStyle">
+                    Morada Profissional
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider name="tipoMoradaProfissional" no-padding>
+                    <ion-select class="inputText" [disabled]="controlDisable" placeholder="<Escolher>" [selectOptions]="selectOptionsMoradaProfissional"
+                        interface="action-sheet" cancelText="Cancelar" (ionChange)="clearTipoEntidade()" formControlName="tipoMoradaProfissional"
+                        required>
+                        <ion-option *ngFor="let mp of list.listaMoradaProfissional" value={{mp.value}}>
+                            <div text-wrap> {{ mp.label }} </div>
+                        </ion-option>
+                    </ion-select>
+
+                </ion-item-divider>
+
+                <div *ngIf="bicForm.controls['tipoMoradaProfissional'].value === 1">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="tipoEntidade" class="labelStyle">
+                        Tipo Entidade
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <ion-item-divider name="tipoEntidade" no-padding>
+                        <ion-select interface="action-sheet" [disabled]="controlDisable" [selectOptions]="selectOptionsTipoEntidade" placeholder="<Escolher>"
+                            class="inputText" cancelText="Cancelar" (ionChange)="populateInstSaudeList()" formControlName="tipoEntidade"
+                            required>
+                            <ion-option *ngFor="let te of list.listaTipoEntidade;" value="{{te.value}}">
+                                {{ te.label }}
+                            </ion-option>
+                        </ion-select>
+                    </ion-item-divider>
+                </div>
+
+                <div *ngIf="bicForm.controls['tipoMoradaProfissional'].value === 2">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="codigoInmlProfissional" class="labelStyle">
+                        Instituição
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <div name="codigoInmlProfissional">
+                        <button ion-item class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" (click)="listModal(list.listaINML,'inst', 'Instituição')"
+                            text-wrap>
+                            <ion-icon item-right ios="md-arrow-dropdown" name="arrow-dropdown" style="font-size:20px">
+                            </ion-icon>
+                            {{ instituicaoLabel }}
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf=" bicForm.controls['tipoEntidade'].value === 1 || bicForm.controls['tipoEntidade'].value === 2 || bicForm.controls['tipoEntidade'].value === 3">
+                    <div class="smSpacer"></div>
+
+                    <ion-label id="codigoSaudeProfissional" class="labelStyle">
+                        Instituição de saúde
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+
+                    <div name="codigoSaudeProfissional">
+                        <button ion-item class="inputText" [disabled]="controlDisable" (click)="listModal(instSaudeList,'instSaude','Instituição')"
+                            text-wrap>
+                            <ion-icon item-right ios="md-arrow-dropdown" name="arrow-dropdown" style="font-size:20px">
+                            </ion-icon>
+                            {{ instituicaoSaudeLabel }}
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="bicForm.controls['tipoEntidade'].value === 1">
+                    <div class="smSpacer"></div>
+                    <ion-label id="tipoServico" class="labelStyle">
+                        Serviço
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="tipoServico">
+                        <button ion-item class="inputText" placeholder="<Escolher>" [disabled]="controlDisable" (click)="listModal(list.listServicos,'tipoServico','Serviço')"
+                            text-wrap>
+                            <ion-icon style="font-size: 20px" ios="md-arrow-dropdown" name="arrow-dropdown" item-right></ion-icon>
+                            {{ servicoLabel }}
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="bicForm.controls['tipoServico'].value === 4">
+                    <div class="smSpacer"></div>
+                    <ion-label id="servicoOutro" class="labelStyle">
+                        Qual?
+                        <font size="4px" color="red"> * </font>
+                    </ion-label>
+                    <div name="servicoOutro">
+                        <ion-textarea rows="4" [disabled]="controlDisable" [maxlength]="45" class="inputText" formControlName="servicoOutro">
+                        </ion-textarea>
+                    </div>
+                </div>
+
+                <div *ngIf="bicForm.controls['tipoMoradaProfissional'].value">
+                    <div class="smSpacer"></div>
+                    <ion-label id="moradaProfissionalOutro" class="labelStyle">
+                        Unidade / Serviço
+                        <span *ngIf="bicForm.controls['tipoMoradaProfissional'].value === 3">
+                            <font size="4px" color="red"> * </font>
+                        </span>
+                    </ion-label>
+                    <div name="moradaProfissionalOutro">
+                        <ion-input type="text" [disabled]="controlDisable" [maxlength]="45" class="inputText" formControlName="moradaProfissionalOutro">
+                        </ion-input>
+                    </div>
+                </div>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="medicoTipoContacto" class="labelStyle">
+                    Tipo de contacto
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+
+                <ion-item-divider name="medicoTipoContacto" no-padding>
+                    <ion-select class="inputText" [disabled]="controlDisable" placeholder="<Escolher>" interface="action-sheet" [selectOptions]="selectOptionsTipoContacto"
+                        cancelText="Cancelar" formControlName="medicoTipoContacto" required>
+                        <ion-option *ngFor="let tc of list.listaTipoContacto" value={{tc.value}}>
+                            {{ tc.label }}
+                        </ion-option>
+                    </ion-select>
+
+                </ion-item-divider>
+
+                <div class="smSpacer"></div>
+
+                <ion-label id="medicoContacto" class="labelStyle">
+                    Contacto
+                    <font size="4px" color="red"> * </font>
+                </ion-label>
+                <div name="medicoContacto">
+                    <ion-input type="text" [maxlength]="40" [disabled]="controlDisable" class="inputText" formControlName="medicoContacto"></ion-input>
+                </div>
+            </div>
+
+            <div class="smSpacer"></div>
+
+            <ion-label class="labelStyle">
+                Data de registo (dd-mm-aaaa)
+                <font size="4px" color="red"> * </font>
+            </ion-label>
+
+            <div>
+                <ion-input class="inputText" [disabled]="true" type="text" formControlName="dataEmissao"></ion-input>
+            </div>
+
+            <div class="smSpacer"></div>
+
+            <ion-label class="labelStyle">
+                Hora de registo (hh:mm)
+                <font size="4px" color="red"> * </font>
+            </ion-label>
+            <div>
+                <ion-input class="inputText" [disabled]="true" type="text" formControlName="horaEmissao"></ion-input>
+            </div>
+        </ion-grid>
+    </form>
+
+    <button [disabled]="controlDisable" class="buttonSave" (click)="onValidateBiNicFields(bicForm)" type="submit">
+        <img src="assets/img/save.svg" width="130px;" height="50px;" />
+    </button>
+
+</ion-content>
+
+
+<div *ngIf="errorsOnValidation || alertsOnValidation">
+    <ion-fab right bottom>
+        <button ion-fab color="dark" (click)="scrollToTop()">
+            <ion-icon name="arrow-dropup"></ion-icon>
+        </button>
+        <div style="height: 20px;"></div>
+        <button ion-fab color="dark" (click)="scrollToBottom()">
+            <ion-icon name="arrow-dropdown"></ion-icon>
+        </button>
+    </ion-fab>
+</div>

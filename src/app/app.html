@@ -1,0 +1,69 @@
+    <ion-menu type="overlay" id="menuPrincipal" swipeEnabled="false" side="left"><!-- [content]="content" -->
+
+    <ion-content class="listBackground">
+
+        <ion-row class="divStyle" padding-left>
+            <ion-col>
+                <ion-label class="sicoLabel ">
+                    <b> SICO </b>
+                </ion-label>
+                <ion-label class="spanMed">
+                    Bem-vindo(a) {{ medicName }}
+                </ion-label>
+                <ion-label class="spanMed">
+                    Nº {{ medicNumber }}
+                </ion-label>
+            </ion-col>
+        </ion-row>
+
+        <div>
+            <ion-item no-lines class="listBackground" (click)="menuHandler(registosPage)" menuClose>
+                <img src="assets/img/registerclick.svg" width="30px;" height="30px;" item-left/>
+                <ion-label class="labelDescription"> Registar </ion-label>
+            </ion-item>
+            <div class="whiteLine">
+            </div>
+            <div>
+                <ion-item no-lines class="listBackground" (click)="menuHandler(consultasPage)" menuClose>
+                    <img src="assets/img/consultaclick.svg" width="30px;" height="30px;" item-left/>
+                    <ion-label class="labelDescription"> Consultar </ion-label>
+                </ion-item>
+            </div>
+            <div class="whiteLine">
+            </div>
+            <ion-item no-lines class="listBackground" (click)="menuHandler(complementaresPage)" menuClose>
+                <img src="assets/img/Alterar.svg" width="30px;" height="30px;" item-left/>
+                <ion-label class="labelDescription"> Alterar/Retificar </ion-label>
+            </ion-item>
+            <div class="whiteLine">
+            </div>
+            <ion-item no-lines class="listBackground" (click)="menuHandler(contactosPage)" menuClose>
+                <img src="assets/img/contactosclick.svg" width="30px;" height="30px;" item-left/>
+                <ion-label class="labelDescription"> Contactos </ion-label>
+            </ion-item>
+            <div class="whiteLine">
+            </div>
+            <ion-item no-lines class="listBackground" (click)="menuHandler(ajudaPage)" menuClose>
+                <img src="assets/img/ajudaclick.svg" width="30px;" height="30px;" item-left/>
+                <ion-label class="labelDescription"> Ajuda </ion-label>
+            </ion-item>
+            <div class="whiteLine">
+            </div>
+            <ion-item no-lines class="listBackground" (click)="menuHandler(sobrePage)" menuClose>
+                <img src="assets/img/sobreclick.svg" width="30px;" height="30px;" item-left/>
+                <ion-label class="labelDescription"> Sobre </ion-label>
+            </ion-item>
+            <div class="whiteLine">
+            </div>
+        </div>
+        <ion-footer>
+            <div class="whiteLine">
+            </div>
+            <ion-item no-lines class="exit" (click)="menuHandler(logoutPage)" menuClose>
+                Sair
+                <img item-right width="21" height="23" src="assets/img/shutdown.svg" />
+            </ion-item>
+        </ion-footer>
+    </ion-content>
+</ion-menu>
+<!--<ion-nav #content [root]="rootPage"></ion-nav>-->

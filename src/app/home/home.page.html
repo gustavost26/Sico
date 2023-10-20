@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<!--<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
       Blank
@@ -17,4 +17,147 @@
     <strong>Ready to create an app?</strong>
     <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
   </div>
-</ion-content>
+</ion-content>-->
+
+<!--<ion-menu type="overlay" contentId="menuPrincipal" side="left">
+
+  <ion-content class="listBackground">
+
+      <ion-row class="divStyle" padding-left>
+          <ion-col>
+              <ion-label class="sicoLabel ">
+                  <b> SICO </b>
+              </ion-label>
+              <ion-label class="spanMed">
+                  Bem-vindo(a) {{ medicName }}
+              </ion-label>
+              <ion-label class="spanMed">
+                  Nº {{ medicNumber }}
+              </ion-label>
+          </ion-col>
+      </ion-row>
+
+      <div id="main-content">
+          <ion-item no-lines class="listBackground" (click)="menuHandler(registosPage)" menuClose>
+              <img src="assets/img/registerclick.svg" width="30px;" height="30px;" item-left/>
+              <ion-label class="labelDescription"> Registar </ion-label>
+          </ion-item>
+          <div class="whiteLine">
+          </div>
+          <div>
+              <ion-item no-lines class="listBackground" (click)="menuHandler(consultasPage)" menuClose>
+                  <img src="assets/img/consultaclick.svg" width="30px;" height="30px;" item-left/>
+                  <ion-label class="labelDescription"> Consultar </ion-label>
+              </ion-item>
+          </div>
+          <div class="whiteLine">
+          </div>
+          <ion-item no-lines class="listBackground" (click)="menuHandler(complementaresPage)" menuClose>
+              <img src="assets/img/Alterar.svg" width="30px;" height="30px;" item-left/>
+              <ion-label class="labelDescription"> Alterar/Retificar </ion-label>
+          </ion-item>
+          <div class="whiteLine">
+          </div>
+          <ion-item no-lines class="listBackground" (click)="menuHandler(contactosPage)" menuClose>
+              <img src="assets/img/contactosclick.svg" width="30px;" height="30px;" item-left/>
+              <ion-label class="labelDescription"> Contactos </ion-label>
+          </ion-item>
+          <div class="whiteLine">
+          </div>
+          <ion-item no-lines class="listBackground" (click)="menuHandler(ajudaPage)" menuClose>
+              <img src="assets/img/ajudaclick.svg" width="30px;" height="30px;" item-left/>
+              <ion-label class="labelDescription"> Ajuda </ion-label>
+          </ion-item>
+          <div class="whiteLine">
+          </div>
+          <ion-item no-lines class="listBackground" (click)="menuHandler(sobrePage)" menuClose>
+              <img src="assets/img/sobreclick.svg" width="30px;" height="30px;" item-left/>
+              <ion-label class="labelDescription"> Sobre </ion-label>
+          </ion-item>
+          <div class="whiteLine">
+          </div>
+      </div>
+      <ion-footer>
+          <div class="whiteLine">
+          </div>
+          <ion-item no-lines class="exit" (click)="menuHandler(logoutPage)" menuClose>
+              Sair
+              <img item-right width="21" height="23" src="assets/img/shutdown.svg" />
+          </ion-item>
+      </ion-footer>
+  </ion-content>
+</ion-menu>-->
+
+<ion-app>
+  <ion-menu contentId="main-content" >
+    <ion-content class="ion-padding">
+      <ion-row class="divStyle" padding-left>
+        <ion-col>
+            <ion-label class="sicoLabel ">
+                <b> SICO </b>
+            </ion-label>
+            <br>
+            <ion-label class="spanMed">
+                Bem-vindo(a) {{ medicName }}
+            </ion-label>
+            <br>
+            <br>
+            <ion-label class="spanMed">
+                Nº {{ medicNumber }}
+            </ion-label>
+        </ion-col>
+      </ion-row>
+      <div id="main-content">
+        <ion-item no-lines class="listBackground" (tap)="menuHandler(registosPage)" menuClose>
+            <ion-icon src="../../assets/img/registerclick.svg" width="30px;" height="30px;" item-left/>
+            <ion-label class="labelDescription"> Registar </ion-label>
+        </ion-item>
+        <div class="whiteLine">
+        </div>
+        <div>
+            <ion-item no-lines class="listBackground" (click)="menuHandler(consultasPage)" menuClose>
+                <img src="../../assets/img/consultaclick.svg" width="30px;" height="30px;" item-left/>
+                <ion-label class="labelDescription"> Consultar </ion-label>
+            </ion-item>
+        </div>
+        <div class="whiteLine">
+        </div>
+        <ion-item no-lines class="listBackground" (click)="menuHandler(complementaresPage)" menuClose>
+            <img src="../../assets/img/Alterar.svg" width="30px;" height="30px;" item-left/>
+            <ion-label class="labelDescription"> Alterar/Retificar </ion-label>
+        </ion-item>
+        <div class="whiteLine">
+        </div>
+        <ion-item no-lines class="listBackground" (click)="menuHandler(contactosPage)" menuClose>
+            <img src="../../assets/img/contactosclick.svg" width="30px;" height="30px;" item-left/>
+            <ion-label class="labelDescription"> Contactos </ion-label>
+        </ion-item>
+        <div class="whiteLine">
+        </div>
+        <ion-item no-lines class="listBackground" (click)="menuHandler(ajudaPage)" menuClose>
+            <img src="../../assets/img/ajudaclick.svg" width="30px;" height="30px;" item-left/>
+            <ion-label class="labelDescription"> Ajuda </ion-label>
+        </ion-item>
+        <div class="whiteLine">
+        </div>
+        <ion-item no-lines class="listBackground" (click)="menuHandler(sobrePage)" menuClose>
+            <img src="../../assets/img/sobreclick.svg" width="30px;" height="30px;" item-left/>
+            <ion-label class="labelDescription"> Sobre </ion-label>
+        </ion-item>
+        <div class="whiteLine">
+        </div>
+    </div>
+    </ion-content>
+  </ion-menu>
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+  </div>
+</ion-app>

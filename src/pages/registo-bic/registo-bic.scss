@@ -1,0 +1,195 @@
+page-registo-bic {
+  .errorValidationItem {
+    border-bottom: 1px solid red;
+    border-left: 1px solid red;
+    border-right: 1px solid red;
+    border-top: 1px solid red;
+  }
+
+  .alertValidationItem {
+    border-bottom: 1px solid orange;
+    border-left: 1px solid orange;
+    border-right: 1px solid orange;
+    border-top: 1px solid orange;
+  }
+
+  .ion-ios-arrow-down:before {
+    padding-top: 25px;
+  }
+
+  .rowStyle {
+    margin: auto 8px 11px 0;
+  }
+
+  .sectionTwoRows {
+    font-size: 20px;
+    padding-top: 10px;
+    font-weight: bold;
+    margin: auto 8px 11px 0;
+  }
+
+  .inputText {
+    color: #000000;
+    border-top: solid 2px #cccccc;
+    border-bottom: solid 2px #cccccc;
+    border-left: solid 2px #cccccc;
+    border-right: solid 2px #cccccc;
+    border-bottom-left-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
+    width: 100%;
+    max-width: 100% !important;
+  }
+
+  .inputMedico {
+    background-color: #e6e6e6;
+    border-top: solid 1px #cccccc;
+    border-bottom: solid 1px #cccccc;
+    border-left: solid 1px #cccccc;
+    border-right: solid 1px #cccccc;
+    border-bottom-left-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
+  }
+
+  .inputSearchText {
+    background-color: white;
+    border-top: solid 2px #cccccc;
+    border-bottom: solid 2px #cccccc;
+    border-left: solid 2px #cccccc;
+    border-right: solid 2px #cccccc;
+  }
+
+  .grayBorder {
+    border-bottom: solid 2px #cccccc;
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .greenBorder {
+    border-bottom: solid 3px #7dc142;
+    width: 99%;
+  }
+
+  .listError {
+    background-color: #d1372f;
+    color: white;
+    padding-top: 1px;
+  }
+
+  .listErrorSpecific {
+    background-color: #d1372f;
+    color: white;
+    padding-top: 1px;
+    border-bottom-left-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
+  }
+
+  .listAlertSpecific {
+    background-color: #fbb03b;
+    color: white;
+    padding-top: 1px;
+    border-bottom-left-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
+  }
+
+  .listAlert {
+    background-color: #fbb03b;
+    width: 100%;
+  }
+
+  .errorSymbol {
+    width: 60px;
+    height: 60px;
+    padding-top: 10px;
+  }
+
+  .impressao {
+    background-color: lightseagreen;
+  }
+
+  .bigSpacer {
+    height: 50px;
+  }
+
+  .medSpacer {
+    height: 30px;
+  }
+
+  .smSpacer {
+    height: 20px;
+  }
+
+  .buttonsSearch,
+  .inemButton,
+  .buttonSave {
+    background-color: #e6e6e6;
+    width: 100%;
+  }
+
+  .buttonConfirm {
+    background-color: #e6e6e6;
+    width: 100%;
+    height: 100%;
+    margin-top: 1%;
+    background-color: transparent;
+  }
+
+  .labelList {
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  .impressaoDocumentos {
+    color: #567485;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .labelDescription {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .labelSubDescription {
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .labelStyle {
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  .labelSubDescription {
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .labelRequired {
+    font-size: 18px;
+  }
+
+  .card-background-page {
+    ion-card {
+      background-color: #ff0000;
+    }
+  }
+
+  ion-item, ion-item-divider {
+    .text-input {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  .text-input {
+    padding-left: 8px;
+  }
+}

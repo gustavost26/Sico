@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <div text-wrap>
+          {{label}}
+        </div>
+      </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col padding-left>
+        <img src="assets/img/pdfdownload.svg" (click)="pdfHandler('pdf')" class="button" width="90%" height="90%" />
+      </ion-col>
+      <ion-col >
+        <img src="assets/img/pdfmail.svg" (click)="pdfHandler('pdfToMail')" class="button" width="90%" height="90%" />
+      </ion-col>
+    </ion-row>
+    <div class="smspacer"></div>
+  </ion-grid>
+</ion-content>

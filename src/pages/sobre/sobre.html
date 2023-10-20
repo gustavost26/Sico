@@ -1,0 +1,90 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Sobre</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-grid>
+      <ion-row align-items-stretch (click)="accordionHandler('bemVindo')">
+        <ion-label text-wrap style="font-size: 18px; font-weight: bold;">
+          Bem vindo ao SICO
+        </ion-label>
+        <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:15px; font-size: 35px;" [name]="bemVindoIcon"></ion-icon>
+        <div class="greenBorder">
+        </div>
+      </ion-row>
+      <div [hidden]="!bemVindo">
+
+        <div class="smSpacer"></div>
+
+        <div style="font-size: 15px; text-align: justify;">
+
+          O SICO (Sistema de Informação dos Certificados de Óbito) é um sistema de informação cuja finalidade é permitir uma articulação
+          das entidades envolvidas no processo de certificação dos óbitos, com vista a promover uma adequada utilização dos
+          recursos, a melhoria da qualidade e do rigor da informação, e a rapidez de acesso aos dados em condições de segurança
+          e no respeito pela privacidade dos cidadãos.
+          <br/>
+          <br/> Foi através deste sistema que, desde 15 de novembro de 2012 (período experimental), se começaram a se registar
+          os primeiros certificados de óbito em formato eletrónico.
+          <br/>
+          <br/> Ao abrigo do Despacho nº 13788/2013, o período experimental do SICO é findado, sendo obrigatória a sua utilização
+          para a certificação dos óbitos ocorridos em território nacional, a partir das 0 horas de 1 de janeiro de 2014. No
+          sentido de acompanhar os progressos tecnológicos, foi criada e desenvolvida a aplicação móvel SICO que permite
+          ao médico facilmente aceder a este sistema de informação.
+          <br/>
+
+        </div>
+
+      </div>
+
+      <div class="smSpacer"></div>
+      <ion-row align-items-stretch (click)="accordionHandler('objectivos')">
+        <ion-label text-wrap style="font-size: 18px; font-weight: bold;">
+            SICO
+        </ion-label>
+        <ion-icon color="dark" style="font-weight: bolder; float:right; padding-top:10px; font-size: 35px;" [name]="objectivosIcon"></ion-icon>
+        <div class="greenBorder">
+        </div>
+      </ion-row>
+      <div [hidden]="!objectivos">
+
+        <div class="smSpacer"></div>
+
+        <div style="font-size: 15px; text-align: justify;">
+          <b>1.</b> A desmaterialização dos certificados de óbito;
+          <br/>
+          <br/>
+          <b>2.</b> O tratamento estatístico das causas de morte;
+          <br/>
+          <br/>
+          <b>3.</b> A atualização da base de dados de utentes do Serviço Nacional de Saúde (SNS) e do correspondente número
+          de identificação atribuído no âmbito do registo nacional de utentes (RNU);
+          <br/>
+          <br/>
+          <b>4.</b> A emissão e a transmissão eletrónica dos certificados de óbito para efeitos de elaboração dos assentos de
+          óbito.
+
+        </div>
+      </div>
+
+    </ion-grid>
+  </ion-list>
+
+  <ion-grid>
+      <ion-row>
+        <ion-col class="logoColumn">
+          <ion-img src="assets/img/dgs.svg" class="logo" width="120px" height="50px" ></ion-img>
+        </ion-col>
+        <ion-col></ion-col>
+        <ion-col class="logoColumn">
+            <ion-img src="assets/img/Ativo3.svg" class="logo" width="120px" height="50px" >
+              </ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+</ion-content>

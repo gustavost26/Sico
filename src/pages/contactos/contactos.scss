@@ -1,0 +1,38 @@
+page-contactos {
+  .acordionBorder {
+    font-weight: bolder;
+    float: right;
+    padding-top: 5px;
+    font-size: 35px;
+  }
+
+  .greenBorder {
+    border-bottom: solid 3px #7dc142;
+    width: 99%;
+  }
+
+  .smSpacer {
+    height: 20px;
+  }
+
+  .verticalListItem {
+    border: 1px solid #333;
+    display: block;
+    overflow: hidden;
+  }
+
+  .verticalItemImage {
+    float: left;
+    margin-right: 5px;
+    margin-top: 1px;
+  }
+  .verticalItemImage img {
+    display: block;
+  }
+  .verticalItemText > div {
+    line-height: 28px;
+  }
+  p.small {
+    line-height: 85%;
+  }
+}

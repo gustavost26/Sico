@@ -1,0 +1,112 @@
+page-login {
+  .buttonLogin {
+    background-color: #567485;
+    color: #ffffff;
+    height: 50px;
+    font-size: 20px;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #333333;
+    border-right: 1px solid #333333;
+    border-top: 1px solid #333333;
+  }
+
+  .inputsField {
+    font-style: normal;
+    font-size: 20px;
+    color: #b3b3b3;
+  }
+
+  .smSpacer {
+    height: 30px;
+  }
+  
+
+  .footerLogin {
+    padding-top: 10px;
+    bottom: 0;
+    position: fixed;
+   // top:0;
+    left:0;
+    // width: 100%;
+    text-align: center;
+  }
+
+  .itemLink {
+    font-size: 15px;
+    color: #5a95c4;
+  }
+
+  .bottom_bar {
+    background-color: #d3dadf;
+  }
+
+  .normalLabel {
+    font-size: 15px;
+  }
+
+  .logo {
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+  }
+
+  .rowImage {
+    justify-content: center;
+  }
+
+  .logIn {
+    color: #333333;
+    white-space: inherit;
+    font-size: 24px;
+  }
+
+  .user {
+    background-color: transparent;
+    width: 25px;
+    height: 29px;
+  }
+
+  .pass {
+    background-color: transparent;
+    width: 25px;
+    height: 29px;
+  }
+
+  // Small space
+  .smspacer {
+    height: 15px;
+  }
+
+  // Medium space
+  .medspace {
+    height: 70px;
+  }
+
+  .authFields {
+    border: 2px solid #dedede;
+    height: 30%;
+  }
+
+  .item-inner,
+  ion-input {
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .border {
+    border-right: 2px solid black;
+    height: 35px;
+    width: 3px;
+  }
+
+  .imgSico {
+    width: auto;
+    display: block;
+    margin: 0 auto;
+    height: auto;
+  }
+
+  .loginFailure {
+    color: red;
+  }
+}

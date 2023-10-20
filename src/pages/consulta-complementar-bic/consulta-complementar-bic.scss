@@ -1,0 +1,34 @@
+page-consulta-complementar-bic {
+  .smSpacer {
+    height: 20px;
+  }
+
+  .inputSearchText {
+    background-color: white;
+    border-top: solid 2px #cccccc;
+    border-bottom: solid 2px #cccccc;
+    border-left: solid 2px #cccccc;
+    border-right: solid 2px #cccccc;
+  }
+
+  .listError {
+    background-color: #d1372f;
+    color: white;
+    padding-top: 1px;
+  }
+
+  .listAlert {
+    background-color: #fbb03b;
+    color: white;
+    padding-top: 1px;
+  }
+
+  .logoColumn {
+    margin-top: 10%;
+  }
+
+  .labelIntroduction {
+    font-weight: bold;
+    font-size: 15px;
+  }
+}
